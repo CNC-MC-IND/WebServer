@@ -9,6 +9,7 @@ var morgan       = require("morgan");
 var mongoose  = require("mongoose");
 
 var index = require('./routes/index');
+var establish = require('./routes/establish');
 var users = require('./routes/users');
 var authenticate = require('./routes/authenticate');
 var signin = require('./routes/signin');
@@ -34,8 +35,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('jwt-secret', config.secret);
 app.set('md5-salt', config.salt);
+app.set('organization', config.organization);
+app.use(function(req, res, next) {
+    //모든 도메인의 요청을 허용하지 않으면 웹브라우저에서 CORS 에러를 발생시킨다.
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+    next();
+});
 
 app.use('/', index);
+app.use('/establish', establish);
 app.use('/users', users);
 app.use('/authenticate', authenticate);
 app.use('/approve', approve);
