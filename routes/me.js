@@ -1,13 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var User     = require('../models/User');
-
+var jwt             = require("jsonwebtoken");
 function ensureAuthorized(req, res, next) {
     var bearerToken;
     var bearerHeader = req.headers["authorization"];
     if (typeof bearerHeader !== 'undefined') {
         var bearer = bearerHeader.split(" ");
-        bearerToken = bearer[1];
+        if(bearer.length > 1){
+            bearerToken = bearer[1];
+        } else {
+            bearerToken = bearer[0];
+        }
+        const secret = req.app.get('jwt-secret');
+        jwt.verify(bearerToken, secret);
         req.token = bearerToken;
         next(); // 다음 콜백함수 진행
     } else {
@@ -20,8 +26,8 @@ process.on('uncaughtException', function(err) {
 });
 
 
-/* GET users listing. */
-router.post('/',ensureAuthorized, function(req, res, next) {
+/* GET verifying user. */
+router.get('/',ensureAuthorized, function(req, res, next) {
     User.findOne({token: req.token}, function(err, user) {
         if (err) {
             res.json({

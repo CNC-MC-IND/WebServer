@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+const config = require('./config')
 var morgan       = require("morgan");
 var mongoose  = require("mongoose");
 
@@ -13,11 +13,12 @@ var users = require('./routes/users');
 var authenticate = require('./routes/authenticate');
 var signin = require('./routes/signin');
 var me = require('./routes/me');
+var approve = require('./routes/approve');
 
 var app = express();
 
 // DB set
-mongoose.connect('localhost');
+mongoose.connect(config.mongodbUri);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,10 +32,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('jwt-secret', config.secret);
+app.set('md5-salt', config.salt);
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/authenticate', authenticate);
+app.use('/approve', approve);
 app.use('/signin', signin);
 app.use('/me', me);
 
