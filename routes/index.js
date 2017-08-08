@@ -2,14 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 function whoAreYou(req, res, next){
-    var device = 'pc';
     var userAgent = req.get('User-Agent');
-
     var result = userAgent.match('Dalvik');
 
-    if(result == null){
+    if(result == null){ // Browser connexion
         next();
-    } else{
+    } else{ // App connexion
         res.status(403);
         res.send("Forbidden");
     }
@@ -17,8 +15,7 @@ function whoAreYou(req, res, next){
 
 /* GET home page. */
 router.get('/', whoAreYou,function(req, res, next) {
-  //res.render('index', { title: 'Express' });
-    res.render('index.html');
+    res.render('./public/index.html');
 });
 
 module.exports = router;

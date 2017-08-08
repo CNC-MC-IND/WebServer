@@ -15,6 +15,7 @@ var authenticate = require('./routes/authenticate');
 var signin = require('./routes/signin');
 var me = require('./routes/me');
 var approve = require('./routes/approve');
+var reset = require('./routes/reset');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.use('/authenticate', authenticate);
 app.use('/approve', approve);
 app.use('/signin', signin);
 app.use('/me', me);
+app.use('/reset', reset);
 
 
 // catch 404 and forward to error handler

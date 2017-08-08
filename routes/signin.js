@@ -22,7 +22,9 @@ router.post('/', function(req, res, next) {
                 userModel.email = req.body.email;
                 userModel.password = req.body.password;
                 userModel.token = 'not permitted';
-                if(userModel.email == undefined || userModel.password == undefined) {
+                userModel.organization = req.body.organization;
+                userModel.name = req.body.name;
+                if(userModel.email == undefined || userModel.password == undefined || userModel.organization == undefined || userModel.name == undefined) {
                     res.json({
                         type: false,
                         data: "Invalid input"
