@@ -63,7 +63,8 @@ router.get('/',ensureAuthorized, function(req, res, next) {
                     user.timestamp = prevUserTimestamp;
                     res.json({
                         type: true,
-                        data: user
+                        data: user,
+                        timestamp : user.timestamp
                     });
                 }
             });
