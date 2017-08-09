@@ -36,6 +36,11 @@ process.on('uncaughtException', function(err) {
     console.log(err);
 });
 
+fetch_unix_timestamp = function()
+{
+    return Math.floor(new Date().getTime() / 1000);
+}
+
 
 /* GET verifying user. */
 router.get('/',ensureAuthorized, function(req, res, next) {
@@ -46,10 +51,25 @@ router.get('/',ensureAuthorized, function(req, res, next) {
                 data: "Error occured: " + err
             });
         } else {
-            res.json({
-                type: true,
-                data: user
+            var prevUserTimestamp = user.timestamp;
+            user.timestamp = fetch_unix_timestamp();
+            user.save(function(err){
+                if(err){
+                    res.json({
+                        type: false,
+                        data: "Can't identify the timestamp"
+                    });
+                } else {
+                    user.timestamp = prevUserTimestamp;
+                    res.json({
+                        type: true,
+                        data: user
+                    });
+                }
             });
+
+
+
         }
     });
 });
