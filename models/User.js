@@ -2,6 +2,8 @@
 var mongoose    = require('mongoose');
 var bcrypt = require('bcryptjs');
 
+var mysql = require('mysql');
+
 fetch_unix_timestamp = function()
 {
     return Math.floor(new Date().getTime() / 1000);

@@ -1,9 +1,25 @@
 var express = require('express');
 var router = express.Router();
+var mysql = require('mysql');
+const configDB = require('../configDB');
+var pool = mysql.createPool(configDB);
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+    pool.getConnection(function (err, connexion) {
+        if (err)
+          throw err;
+        connexion.query('SELECT * FROM users', function (err, rows) {
+            if (err)
+              throw err;
+            res.json({
+                type : true,
+                data : JSON.stringify(rows)
+            });
+            connexion.release();
+        });
+    })
 });
 
 module.exports = router;

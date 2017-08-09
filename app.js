@@ -4,9 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-const config = require('./config')
+const config = require('./config');
+const configDB = require('./configDB');
 var morgan       = require("morgan");
 var mongoose  = require("mongoose");
+var mysql = require('mysql');
 
 var index = require('./routes/index');
 var establish = require('./routes/establish');
@@ -21,6 +23,11 @@ var app = express();
 
 // DB set
 mongoose.connect(config.mongodbUri);
+var mysqlConnexion = mysql.createPool(configDB);
+mysqlConnexion.getConnection(function (err) {
+    if(err)
+        throw err;
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
