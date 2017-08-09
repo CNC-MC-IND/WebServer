@@ -13,11 +13,22 @@ function ensureAuthorized(req, res, next) {
             bearerToken = bearer[0];
         }
         const secret = req.app.get('jwt-secret');
-        jwt.verify(bearerToken, secret);
-        req.token = bearerToken;
-        next(); // 다음 콜백함수 진행
+        jwt.verify(bearerToken, secret, function (err) {
+            if(err) {
+                res.json({
+                    type: false,
+                    data: "Error occured: " + err
+                });
+            } else {
+                req.token = bearerToken;
+                next(); // 다음 콜백함수 진행
+            }
+        });
     } else {
-        res.send(403);
+        res.json({
+            type: false,
+            data: "can't find token in your request"
+        });
     }
 }
 
