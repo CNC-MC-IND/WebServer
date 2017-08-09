@@ -1,6 +1,6 @@
 // mongoose를 사용하기 위해 해당 모듈을 import
 var mongoose    = require('mongoose');
-var bcrypt = require('bcryptjs'), SALT_WORK_FACTOR = 10;
+var bcrypt = require('bcryptjs');
 
 // 스키마 정의
 // email, password, token 필드를 가지며 각각의 필드는 string 타입이다.

@@ -5,7 +5,7 @@ var User     = require('../models/User');
 
 /* POST signin. */
 router.post('/', function(req, res, next) {
-    User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
+    User.findOne({email: req.body.email}, function(err, user) {
         if (err) {
             res.json({
                 type: false,
