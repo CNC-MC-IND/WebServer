@@ -1,31 +1,34 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
-var upload = multer({ dest: 'uploads/' })
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '../video/') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname) // cb 콜백함수를 통해 전송된 파일 이름 설정
+    }
+})
+var upload = multer({ storage: storage })
+//var upload = multer({ dest: 'uploads/' })
 
+var type = upload.single('file');
 
-var fs = require('fs');
+router.post('/', function (req,res) {
+    type(req, res, function (err) {
+        if (err) {
+            res.json({
+                type : false,
+                data : err.message
+            })
+        } else {
+            res.json({
+                type : true,
+                data :  req.file.originalname
+            })
+        }
 
-/** Permissible loading a single file,
- the value of the attribute "name" in the form of "recfile". **/
-var type = upload.single('avatar');
-
-router.post('/', type, function (req,res) {
-
-    /** When using the "single"
-     data come in "req.file" regardless of the attribute "name". **/
-    var tmp_path = req.file.path;
-
-    /** The original name of the uploaded file
-     stored in the variable "originalname". **/
-    var target_path = 'uploads/' + req.file.originalname;
-
-    /** A better way to copy the uploaded file. **/
-    var src = fs.createReadStream(tmp_path);
-    var dest = fs.createWriteStream(target_path);
-    src.pipe(dest);
-    src.on('end', function() { res.render('complete'); });
-    src.on('error', function(err) { res.render('error'); });
+    })
 
 });
 module.exports = router;

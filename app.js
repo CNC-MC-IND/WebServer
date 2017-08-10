@@ -19,6 +19,7 @@ var me = require('./routes/me');
 var approve = require('./routes/approve');
 var reset = require('./routes/reset');
 var videoUpload = require('./routes/video_upload');
+var videoList = require('./routes/video_list')
 
 var app = express();
 
@@ -38,13 +39,13 @@ app.engine('html', require('ejs').renderFile);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('jwt-secret', config.secret);
-app.set('md5-salt', config.salt);
 app.set('organization', config.organization);
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', parameterLimit: 1000000}));
 app.use(function(req, res, next) {
     //모든 도메인의 요청을 허용하지 않으면 웹브라우저에서 CORS 에러를 발생시킨다.
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -62,6 +63,7 @@ app.use('/signin', signin);
 app.use('/me', me);
 app.use('/reset', reset);
 app.use('/video_upload', videoUpload);
+app.use('/video_list', videoList);
 
 
 // catch 404 and forward to error handler
