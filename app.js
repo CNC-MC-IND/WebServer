@@ -18,6 +18,7 @@ var signin = require('./routes/signin');
 var me = require('./routes/me');
 var approve = require('./routes/approve');
 var reset = require('./routes/reset');
+var videoUpload = require('./routes/video_upload');
 
 var app = express();
 
@@ -60,6 +61,7 @@ app.use('/approve', approve);
 app.use('/signin', signin);
 app.use('/me', me);
 app.use('/reset', reset);
+app.use('/video_upload', videoUpload);
 
 
 // catch 404 and forward to error handler
@@ -77,7 +79,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send('error');
+  res.send('error : ' + err.message);
 });
 
 module.exports = app;
