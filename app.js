@@ -20,6 +20,8 @@ var approve = require('./routes/approve');
 var reset = require('./routes/reset');
 var videoUpload = require('./routes/video_upload');
 var videoList = require('./routes/video_list')
+var videoRemove = require('./routes/video_remove')
+var videoStreaming = require('./routes/video_streaming');
 
 var app = express();
 
@@ -64,7 +66,8 @@ app.use('/me', me);
 app.use('/reset', reset);
 app.use('/video_upload', videoUpload);
 app.use('/video_list', videoList);
-
+app.use('/video_remove', videoRemove);
+app.use('/video_streaming', videoStreaming);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

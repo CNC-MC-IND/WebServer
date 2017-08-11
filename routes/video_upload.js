@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var toolBox = require('../models/toolBox');
 var multer = require('multer');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -14,7 +15,7 @@ var upload = multer({ storage: storage })
 
 var type = upload.single('file');
 
-router.post('/', function (req,res) {
+router.post('/',toolBox.checkPermission , function (req,res) {
     type(req, res, function (err) {
         if (err) {
             res.json({

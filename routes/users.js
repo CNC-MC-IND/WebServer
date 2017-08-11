@@ -3,10 +3,9 @@ var router = express.Router();
 var mysql = require('mysql');
 const configDB = require('../configDB');
 var pool = mysql.createPool(configDB);
+var toolBox = require('../models/toolBox');
 
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', toolBox.checkPermission,function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
           throw err;
