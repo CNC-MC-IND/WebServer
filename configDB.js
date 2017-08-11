@@ -4,4 +4,5 @@ module.exports = {
     'user' : 'admin',
     'password' : 'admin',
     'database' : 'cnc_mc',
+    'query_users' : 'SELECT * FROM users'
 }

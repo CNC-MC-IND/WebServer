@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
           throw err;
-        connexion.query('SELECT * FROM users', function (err, rows) {
+        connexion.query(configDB.query_users, function (err, rows) {
             if (err)
               throw err;
             res.json({
