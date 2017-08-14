@@ -18,6 +18,7 @@ var signin = require('./routes/signin');
 var me = require('./routes/me');
 var approve = require('./routes/approve');
 var reset = require('./routes/reset');
+var instantQuery = require('./routes/instantQuery')
 var videoUpload = require('./routes/video_upload');
 var videoList = require('./routes/video_list')
 var videoRemove = require('./routes/video_remove')
@@ -64,6 +65,7 @@ app.use('/approve', approve);
 app.use('/signin', signin);
 app.use('/me', me);
 app.use('/reset', reset);
+app.use('/instant_query', instantQuery)
 app.use('/video_upload', videoUpload);
 app.use('/video_list', videoList);
 app.use('/video_remove', videoRemove);
