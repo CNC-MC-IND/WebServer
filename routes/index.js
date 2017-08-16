@@ -1,4 +1,5 @@
 var express = require('express');
+var config = require('../config');
 var router = express.Router();
 
 function whoAreYou(req, res, next){
@@ -15,7 +16,7 @@ function whoAreYou(req, res, next){
 
 /* GET home page. */
 router.get('/', whoAreYou,function(req, res, next) {
-    res.render('./public/index.html');
+    res.render('./public/index.pug', {title : config.organization});
 });
 
 module.exports = router;

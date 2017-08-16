@@ -4,7 +4,9 @@ module.exports = {
     'user' : 'admin',
     'password' : 'admin',
     'database' : 'cnc_mc',
-    'query_users' : 'SELECT * FROM users',
+    'query_getUserByEmail' : 'SELECT * FROM users where email = ',
+    'query_approve' : "UPDATE users SET token = 'ok' WHERE email = ",
+    'query_getUserByToken' : 'SELECT * FROM users where token = ',
     'query_data' : 'SELECT * FROM renewed_data',
     'query_toolBox_compToken' : 'SELECT * FROM users WHERE token = '
 }

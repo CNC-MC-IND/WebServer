@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const config = require('./config');
 const configDB = require('./configDB');
-var morgan       = require("morgan");
-var mongoose  = require("mongoose");
+//var morgan       = require("morgan");
+//var mongoose  = require("mongoose");
 var mysql = require('mysql');
 
 var index = require('./routes/index');
@@ -28,7 +28,7 @@ var requestRenewedData = require('./routes/requestRenewedData')
 var app = express();
 
 // DB set
-mongoose.connect(config.mongodbUri);
+//mongoose.connect(config.mongodbUri);
 var mysqlConnexion = mysql.createPool(configDB);
 mysqlConnexion.getConnection(function (err) {
     if(err)
@@ -37,8 +37,9 @@ mysqlConnexion.getConnection(function (err) {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'pug');
+//app.set('view engine', 'ejs');
+//app.engine('html', require('ejs').renderFile);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

@@ -1,58 +1,55 @@
 var express = require('express');
 var router = express.Router();
+var mysql = require('mysql');
+const configDB = require('../configDB');
+var pool = mysql.createPool(configDB);
+var toolBox = require('../models/toolBox');
 
-var User     = require('../models/User');
+fetch_unix_timestamp = function()
+{
+    return Math.floor(new Date().getTime() / 1000);
+}
 
-/* POST signin. */
-router.post('/', function(req, res, next) {
-    User.findOne({email: req.body.email}, function(err, user) {
-        if (err) {
-            res.json({
-                type: false,
-                data: "Error occured: " + err
-            });
-        } else {
-            if (user && user.email != undefined && user.password != undefined) {
+router.post('/',function(req, res, next) {
+    pool.getConnection(function (err, connexion) {
+        if (err)
+            throw err;
+        connexion.query(configDB.query_getUserByEmail + "'" +req.body.email+ "'", function (err, rows) {
+            if (err)
+                throw err;
+            if(rows.length > 0){
                 res.json({
                     type: false,
                     data: "User already exists!"
                 });
             } else {
-                var userModel = new User();
-                userModel.email = req.body.email;
-                userModel.password = req.body.password;
-                userModel.token = 'not permitted';
-                userModel.organization = req.body.organization;
-                userModel.name = req.body.name;
-                if(userModel.email == undefined || userModel.password == undefined || userModel.organization == undefined || userModel.name == undefined) {
+                var email = req.body.email
+                var name = req.body.name
+                var organization = req.body.organization
+                var timestamp = fetch_unix_timestamp()
+                var password = req.body.password
+                var token = 'not permitted'
+                                
+                if(email == undefined || password == undefined || organization == undefined || name == undefined) {
                     res.json({
                         type: false,
                         data: "Invalid input"
                     });
                     return;
                 }
-                userModel.save(function(err, user1) {
-                    res.json({
-                        type: true,
-                        data: user1,
-                        token: user1.token
-                    })
-                });
-                /*
-                userModel.save(function(err, user) { // DB 저장 완료되면 콜백 함수 호출
-                    //user.token = jwt.sign(user, process.env.JWT_SECRET); // user 정보로부터 토큰 생성d
-                    user.token = 'not permitted';
-                    user.save(function(err, user1) {
+                connexion.query("INSERT INTO users (email, name, organization, timestamp, password, token) VALUES ('"+email+"', '"+name+"', '"+organization+"', "+timestamp+", '"+password+"', '"+token+"')", function (err1, result) {
+                    if(err1) throw err1
+                    if(result.affectedRows > 0){
                         res.json({
                             type: true,
-                            data: user1,
-                            token: user1.token
-                        });
-                    });
-                })*/
+                            data: email
+                        })
+                    }
+                })
             }
-        }
-    });
+            connexion.release();
+        });
+    })
 });
 
 module.exports = router;
