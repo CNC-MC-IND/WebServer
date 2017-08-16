@@ -5,5 +5,6 @@ module.exports = {
     'password' : 'admin',
     'database' : 'cnc_mc',
     'query_users' : 'SELECT * FROM users',
+    'query_data' : 'SELECT * FROM renewed_data',
     'query_toolBox_compToken' : 'SELECT * FROM users WHERE token = '
 }

@@ -23,6 +23,7 @@ var videoUpload = require('./routes/video_upload');
 var videoList = require('./routes/video_list')
 var videoRemove = require('./routes/video_remove')
 var videoStreaming = require('./routes/video_streaming');
+var requestRenewedData = require('./routes/requestRenewedData')
 
 var app = express();
 
@@ -70,6 +71,7 @@ app.use('/video_upload', videoUpload);
 app.use('/video_list', videoList);
 app.use('/video_remove', videoRemove);
 app.use('/video_streaming', videoStreaming);
+app.use('/request_renewed_data', requestRenewedData)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
