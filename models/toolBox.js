@@ -5,6 +5,14 @@ var mysql = require('mysql');
 const configDB = require('../configDB');
 var pool = mysql.createPool(configDB);
 
+var gcm = require('node-gcm');
+var fs = require('fs');
+
+const configFCM = require('../configFCM')
+var FCM = require('fcm-push')
+var fcm = new FCM(configFCM.serverKey)
+
+
 exports.checkPermission = function(req, res, next){
     pool.getConnection(function (err, connexion) {
         if (err)
@@ -24,3 +32,37 @@ exports.checkPermission = function(req, res, next){
         });
     })
 }
+
+exports.broadcastPush = function (title, msg) {
+    pool.getConnection(function (err, connexion) {
+        connexion.query(configDB.query_getFcmList, function (err, rows) {
+            if (err)
+                throw err;
+            if(rows.length !== 0){
+                var registrationIds = [];
+                for( var i =0; i< rows.length; i++){
+                    registrationIds.push(rows[i]['fcm'])
+                }
+
+                var message = {
+                    registration_ids : registrationIds,
+                    collapse_key: 'your_collapse_key',
+                    notification: {
+                        title: 'ㅎ히ㅣ히히',
+                        body: '즐'
+                    }
+                }
+
+                fcm.send(message, function (err, response) {
+                    if(err) throw err
+                    else console.log(response)
+                })
+            }
+            connexion.release();
+        });
+
+    })
+
+
+}
+

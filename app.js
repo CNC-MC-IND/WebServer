@@ -9,21 +9,25 @@ const configDB = require('./configDB');
 //var morgan       = require("morgan");
 //var mongoose  = require("mongoose");
 var mysql = require('mysql');
+var toolBox = require('./models/toolBox')
+var pushScheduler = require('./models/pushScheduler')
 
 var index = require('./routes/index');
 var establish = require('./routes/establish');
-var users = require('./routes/users');
-var authenticate = require('./routes/authenticate');
-var signin = require('./routes/signin');
-var me = require('./routes/me');
-var approve = require('./routes/approve');
-var reset = require('./routes/reset');
-var instantQuery = require('./routes/instantQuery')
-var videoUpload = require('./routes/video_upload');
-var videoList = require('./routes/video_list')
-var videoRemove = require('./routes/video_remove')
-var videoStreaming = require('./routes/video_streaming');
-var requestRenewedData = require('./routes/requestRenewedData')
+var admin_users = require('./routes/admin/users');
+var admin_approve = require('./routes/admin/approve');
+var admin_instantQuery = require('./routes/admin/instantQuery')
+var account_authenticate = require('./routes/account/authenticate');
+var account_signin = require('./routes/account/signin');
+var account_me = require('./routes/account/me');
+var account_reset = require('./routes/account/reset');
+var video_upload = require('./routes/video/upload');
+var video_list = require('./routes/video/list')
+var video_remove = require('./routes/video/remove')
+var video_streaming = require('./routes/video/streaming');
+var data_renewedData = require('./routes/data/renewedData')
+var fcm_regist = require('./routes/FCM/regist')
+var fcm_unregist = require('./routes/FCM/unregist')
 
 var app = express();
 
@@ -61,18 +65,22 @@ app.use(function(req, res, next) {
 
 app.use('/', index);
 app.use('/establish', establish);
-app.use('/users', users);
-app.use('/authenticate', authenticate);
-app.use('/approve', approve);
-app.use('/signin', signin);
-app.use('/me', me);
-app.use('/reset', reset);
-app.use('/instant_query', instantQuery)
-app.use('/video_upload', videoUpload);
-app.use('/video_list', videoList);
-app.use('/video_remove', videoRemove);
-app.use('/video_streaming', videoStreaming);
-app.use('/request_renewed_data', requestRenewedData)
+app.use('/admin/users', admin_users);
+app.use('/admin/instant_query', admin_instantQuery)
+app.use('/admin/approve', admin_approve);
+app.use('/account/authenticate', account_authenticate);
+app.use('/account/signin', account_signin);
+app.use('/account/me', account_me);
+app.use('/account/reset', account_reset);
+app.use('/video/upload', video_upload);
+app.use('/video/list', video_list);
+app.use('/video/remove', video_remove);
+app.use('/video/streaming', video_streaming);
+app.use('/data/renewed_data', data_renewedData)
+app.use('/fcm/regist', fcm_regist)
+app.use('/fcm/unregist', fcm_unregist)
+
+pushScheduler.start()
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -8,5 +8,6 @@ module.exports = {
     'query_approve' : "UPDATE users SET token = 'ok' WHERE email = ",
     'query_getUserByToken' : 'SELECT * FROM users where token = ',
     'query_data' : 'SELECT * FROM renewed_data',
-    'query_toolBox_compToken' : 'SELECT * FROM users WHERE token = '
+    'query_toolBox_compToken' : 'SELECT * FROM users WHERE token = ',
+    "query_getFcmList" : 'SELECT fcm from registered_fcm'
 }
