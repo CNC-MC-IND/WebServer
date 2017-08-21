@@ -5,13 +5,9 @@ var mysql = require('mysql');
 const configDB = require('../configDB');
 var pool = mysql.createPool(configDB);
 
-var gcm = require('node-gcm');
-var fs = require('fs');
-
 const configFCM = require('../configFCM')
 var FCM = require('fcm-push')
 var fcm = new FCM(configFCM.serverKey)
-
 
 exports.checkPermission = function(req, res, next){
     pool.getConnection(function (err, connexion) {
