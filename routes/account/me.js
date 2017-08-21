@@ -57,14 +57,12 @@ router.get('/', ensureAuthorized,function(req, res, next) {
                 var user = rows[0]
                 var prevUserTimestamp = user.timestamp;
                 user.timestamp = fetch_unix_timestamp();
-                var fcmStatus = (user.fcm == '-') ? false : true
 
                 connexion.query("UPDATE users SET timestamp = '" + user.timestamp + "' WHERE token = '" + req.token + "'", function(err1, result){
                     if(err1) throw err1;
                     if(result.affectedRows > 0){
                         res.json({
                             type: true,
-                            fcm : fcmStatus,
                             data: user,
                             timestamp : prevUserTimestamp
                         });

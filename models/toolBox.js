@@ -42,10 +42,10 @@ exports.broadcastPush = function (title, msg) {
 
                 var message = {
                     registration_ids : registrationIds,
-                    collapse_key: 'your_collapse_key',
+                    collapse_key: 'jumpsnack',
                     notification: {
-                        title: 'ㅎ히ㅣ히히',
-                        body: '즐'
+                        title: title,
+                        body: msg
                     }
                 }
 

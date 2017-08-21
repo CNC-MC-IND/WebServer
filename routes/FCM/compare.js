@@ -10,12 +10,14 @@ router.post('/', toolBox.checkPermission,function(req, res, next) {
         if (err)
             throw err;
         var email = req.body.email
-        connexion.query("UPDATE users SET fcm = '-' WHERE email = '" + email + "'", function (err1, result) {
+        var fcm = req.body.fcm
+        connexion.query("SELECT * FROM users WHERE fcm = '"+fcm+"' AND email = '"+email+"'", function (err1, rows) {
             if(err1) throw err1
-            if(result.affectedRows > 0){
+            if(rows.length > 0){
                 res.json({
                     type: true,
-                    data : result
+                    data : rows,
+                    fcm : fcm
                 });
             } else {
                 res.json({
@@ -24,7 +26,6 @@ router.post('/', toolBox.checkPermission,function(req, res, next) {
                 });
             }
         })
-
 
         connexion.release();
     });

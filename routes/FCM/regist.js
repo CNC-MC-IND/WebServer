@@ -9,14 +9,15 @@ router.post('/', toolBox.checkPermission,function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
             throw err;
-        var token = req.headers["authorization"]
+        var email = req.body.email
         var fcm = req.body.fcm
-            connexion.query("UPDATE users SET fcm = '" + fcm + "' WHERE token = '" + token + "'", function (err1, result) {
+            connexion.query("UPDATE users SET fcm = '" + fcm + "' WHERE email = '" + email + "'", function (err1, result) {
                 if(err1) throw err1
                 if(result.affectedRows > 0){
                     res.json({
                         type: true,
-                        fcm : true
+                        data : result,
+                        fcm : fcm
                     });
                 } else {
                     res.json({

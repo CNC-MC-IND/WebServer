@@ -14,12 +14,11 @@ router.post('/',function(req, res, next) {
 
         var stringData = req.body.data
         var jsonData = JSON.parse(stringData)
-
+        var query = "INSERT into data (id, lubricant_machine, lubricant_saw, pressure_air_main, pressure_oil_hydraulic, servo_cut, servo_transfer, spindle, safety_door, depletion, workload, timestamp) VALUES"
         for( var i=0; i<jsonData.length; i++){
             var data = jsonData[i]
 
-            var query = "INSERT into data (id, lubricant_machine, lubricant_saw, pressure_air_main, pressure_oil_hydraulic, servo_cut, servo_transfer, spindle, safety_door, depletion, workload, timestamp)" +
-                " VALUES (" +
+           query += '(' +
                 data.id + ", " +
                 data.lubricant_machine + ", " +
                     data.lubricant_saw + ", " +
@@ -31,24 +30,29 @@ router.post('/',function(req, res, next) {
                     data.safety_door + ", " +
                     data.depletion + "," +
                 data.workload + ", " +
-                data.timestamp +
-                    ");"
+                data.timestamp + ")"
 
-            connexion.query(query, function (err, rows) {
-                if (err)
-                    throw err;
-                if (rows.affectedRows < 1){
-                    res.json({
-                        type : false,
-                        data : 'affectedRows are smaller than 1'
-                    })
-                    return
-                }
-                connexion.release();
-            });
+            if(jsonData.length > 1 && i !== jsonData.length-1){
+                query += ','
+            }
         }
+        connexion.query(query, function (err, rows) {
+            if (err)
+                throw err;
+            if (rows.affectedRows < 1){
+                res.json({
+                    type : false,
+                    data : 'affectedRows are smaller than 1'
+                })
+                return
+            } else {
+                res.json({
+                    type : true
+                })
+            }
+            connexion.release();
 
-
+        });
     })
 });
 

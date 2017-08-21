@@ -27,6 +27,7 @@ var video_remove = require('./routes/video/remove')
 var video_streaming = require('./routes/video/streaming');
 var data_renewedData = require('./routes/data/renewedData')
 var data_insert = require('./routes/data/insert')
+var fcm_compare = require('./routes/FCM/compare')
 var fcm_regist = require('./routes/FCM/regist')
 var fcm_unregist = require('./routes/FCM/unregist')
 
@@ -79,6 +80,7 @@ app.use('/video/remove', video_remove);
 app.use('/video/streaming', video_streaming);
 app.use('/data/renewed_data', data_renewedData)
 app.use('/data/insert', data_insert)
+app.use('/fcm/compare', fcm_compare)
 app.use('/fcm/regist', fcm_regist)
 app.use('/fcm/unregist', fcm_unregist)
 

@@ -5,7 +5,7 @@ var pool = mysql.createPool(configDB);
 var compVal = 0
 var loopFlag = true
 var async = require('async')
-var delay = 5000
+var delay = 10000
 
 exports.start = function () {
     loopFlag = true
