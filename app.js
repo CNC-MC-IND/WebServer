@@ -6,12 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const config = require('./config');
 const configDB = require('./configDB');
-//var morgan       = require("morgan");
-//var mongoose  = require("mongoose");
 var mysql = require('mysql');
 var toolBox = require('./models/toolBox')
 var pushScheduler = require('./models/pushScheduler')
 
+var redirect = require('./routes/redirect')
 var index = require('./routes/index');
 var establish = require('./routes/establish');
 var admin_users = require('./routes/admin/users');
@@ -28,8 +27,8 @@ var video_streaming = require('./routes/video/streaming');
 var data_renewedData = require('./routes/data/renewedData')
 var data_insert = require('./routes/data/insert')
 var fcm_compare = require('./routes/FCM/compare')
-var fcm_regist = require('./routes/FCM/regist')
-var fcm_unregist = require('./routes/FCM/unregist')
+var fcm_regist = require('./routes/FCM/register')
+var fcm_unregist = require('./routes/FCM/unregister')
 
 var app = express();
 
@@ -65,7 +64,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', index);
+app.use('/', redirect);
+app.use('/index', index);
 app.use('/establish', establish);
 app.use('/admin/users', admin_users);
 app.use('/admin/instant_query', admin_instantQuery)
