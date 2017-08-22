@@ -17,7 +17,7 @@ var admin_users = require('./routes/admin/users');
 var admin_approve = require('./routes/admin/approve');
 var admin_instantQuery = require('./routes/admin/instantQuery')
 var account_cert = require('./routes/account/cert');
-var account_signin = require('./routes/account/signin');
+var account_signup = require('./routes/account/signup');
 var account_validate = require('./routes/account/validate');
 var account_reset = require('./routes/account/reset');
 var video_upload = require('./routes/video/upload');
@@ -71,7 +71,7 @@ app.use('/admin/users', admin_users);
 app.use('/admin/instant_query', admin_instantQuery)
 app.use('/admin/approve', admin_approve);
 app.use('/account/cert', account_cert);
-app.use('/account/signin', account_signin);
+app.use('/account/signup', account_signup);
 app.use('/account/validate', account_validate);
 app.use('/account/reset', account_reset);
 app.use('/video/upload', video_upload);
