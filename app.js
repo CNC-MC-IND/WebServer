@@ -26,8 +26,8 @@ var video_streaming = require('./routes/video/streaming');
 var data_renewedData = require('./routes/data/renewedData')
 var data_insert = require('./routes/data/insert')
 var fcm_compare = require('./routes/FCM/compare')
-var fcm_regist = require('./routes/FCM/register')
-var fcm_unregist = require('./routes/FCM/unregister')
+var fcm_register = require('./routes/FCM/register')
+var fcm_unregister = require('./routes/FCM/unregister')
 
 var app = express();
 
@@ -79,8 +79,8 @@ app.use('/video/streaming', video_streaming);
 app.use('/data/renewed_data', data_renewedData)
 app.use('/data/insert', data_insert)
 app.use('/fcm/compare', fcm_compare)
-app.use('/fcm/regist', fcm_regist)
-app.use('/fcm/unregist', fcm_unregist)
+app.use('/fcm/register', fcm_register)
+app.use('/fcm/unregister', fcm_unregister)
 
 pushScheduler.start()
 
