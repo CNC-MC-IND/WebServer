@@ -10,7 +10,6 @@ var mysql = require('mysql');
 var toolBox = require('./models/toolBox')
 var pushScheduler = require('./models/pushScheduler')
 
-var redirect = require('./routes/redirect')
 var index = require('./routes/index');
 var establish = require('./routes/establish');
 var admin_users = require('./routes/admin/users');
@@ -64,8 +63,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', redirect);
-app.use('/index', index);
+app.use('/', index);
 app.use('/establish', establish);
 app.use('/admin/users', admin_users);
 app.use('/admin/instant_query', admin_instantQuery)
