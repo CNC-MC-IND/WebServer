@@ -4,13 +4,16 @@ var router = express.Router();
 
 function whoAreYou(req, res, next){
     var userAgent = req.get('User-Agent');
-    var result = userAgent.match('Dalvik');
 
-    if(result == null){ // Browser connexion
-        next();
-    } else{ // App connexion
-        res.status(403);
-        res.send("Forbidden");
+    if(userAgent !== undefined){
+        var result = userAgent.match('Dalvik');
+
+        if(result == null){ // Browser connexion
+            next();
+        } else{ // App connexion
+            res.status(403);
+            res.send("Forbidden");
+        }
     }
 }
 
