@@ -13,7 +13,7 @@ router.post('/', function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
             throw err;
-        connexion.query("SELECT * FROM users WHERE organization = '" + req.body.organization + "' name = '" + req.body.name + "' email = '" + req.body.email + "'", function (err, rows) {
+        connexion.query("SELECT * FROM users WHERE organization = '" + req.body.organization + "' AND name = '" + req.body.name + "' AND email = '" + req.body.email + "'", function (err, rows) {
             if (err)
                 throw err;
             if(rows.length > 0){
