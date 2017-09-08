@@ -10,6 +10,7 @@ var mysql = require('mysql');
 var toolBox = require('./models/toolBox')
 var pushScheduler = require('./models/pushScheduler')
 
+
 var index = require('./routes/index');
 var establish = require('./routes/establish');
 var admin_users = require('./routes/admin/users');
@@ -75,7 +76,7 @@ app.use('/account/reset', account_reset);
 app.use('/video/upload', video_upload);
 app.use('/video/list', video_list);
 app.use('/video/remove', video_remove);
-app.use('/video/streaming', video_streaming);
+app.use('/video/streaming/*', video_streaming);
 app.use('/data/renewed_data', data_renewedData)
 app.use('/data/insert', data_insert)
 app.use('/fcm/compare', fcm_compare)
