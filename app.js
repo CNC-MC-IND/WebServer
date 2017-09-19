@@ -7,27 +7,29 @@ var bodyParser = require('body-parser');
 const config = require('./config');
 const configDB = require('./configDB');
 var mysql = require('mysql');
-var toolBox = require('./models/toolBox')
-var pushScheduler = require('./models/pushScheduler')
+var toolBox = require('./models/toolBox');
+var pushScheduler = require('./models/pushScheduler');
 
 var index = require('./routes/index');
+var join = require('./routes/join');
 var establish = require('./routes/establish');
 var admin_users = require('./routes/admin/users');
 var admin_approve = require('./routes/admin/approve');
-var admin_instantQuery = require('./routes/admin/instantQuery')
+var admin_instantQuery = require('./routes/admin/instantQuery');
 var account_cert = require('./routes/account/cert');
 var account_signup = require('./routes/account/signup');
 var account_validate = require('./routes/account/validate');
 var account_reset = require('./routes/account/reset');
 var video_upload = require('./routes/video/upload');
-var video_list = require('./routes/video/list')
-var video_remove = require('./routes/video/remove')
+var video_list = require('./routes/video/list');
+var video_remove = require('./routes/video/remove');
 var video_streaming = require('./routes/video/streaming');
-var data_renewedData = require('./routes/data/renewedData')
-var data_insert = require('./routes/data/insert')
-var fcm_compare = require('./routes/FCM/compare')
-var fcm_register = require('./routes/FCM/register')
-var fcm_unregister = require('./routes/FCM/unregister')
+var data_renewedData = require('./routes/data/renewedData');
+var data_insert = require('./routes/data/insert');
+var fcm_compare = require('./routes/FCM/compare');
+var fcm_register = require('./routes/FCM/register');
+var fcm_unregister = require('./routes/FCM/unregister');
+
 
 var app = express();
 
@@ -51,8 +53,8 @@ app.use(logger('dev'));
 //app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('jwt-secret', config.secret);
-app.set('organization', config.organization);
+app.set('jwt-secret', config.secret); //
+app.set('organization', config.organization); //
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', parameterLimit: 1000000}));
 app.use(function(req, res, next) {
@@ -62,11 +64,11 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
     next();
 });
-
 app.use('/', index);
+app.use('/join', join);
 app.use('/establish', establish);
 app.use('/admin/users', admin_users);
-app.use('/admin/instant_query', admin_instantQuery)
+app.use('/admin/instant_query', admin_instantQuery);
 app.use('/admin/approve', admin_approve);
 app.use('/account/cert', account_cert);
 app.use('/account/signup', account_signup);
@@ -76,11 +78,11 @@ app.use('/video/upload', video_upload);
 app.use('/video/list', video_list);
 app.use('/video/remove', video_remove);
 app.use('/video/streaming', video_streaming);
-app.use('/data/renewed_data', data_renewedData)
-app.use('/data/insert', data_insert)
-app.use('/fcm/compare', fcm_compare)
-app.use('/fcm/register', fcm_register)
-app.use('/fcm/unregister', fcm_unregister)
+app.use('/data/renewed_data', data_renewedData);
+app.use('/data/insert', data_insert);
+app.use('/fcm/compare', fcm_compare);
+app.use('/fcm/register', fcm_register);
+app.use('/fcm/unregister', fcm_unregister);
 
 pushScheduler.start()
 
