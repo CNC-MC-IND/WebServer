@@ -7,17 +7,20 @@ var url = require('url');
 var path = require('path');
 var zlib = require('zlib');
 
-router.post('/', toolBox.checkPermission,function(req, res, next) {
-    var filepath = '../video/' + req.body.filename;
+router.get('/', toolBox.checkPermission,function(req, res, next) {
+    var params = req.baseUrl.split('/')
+    var filename = params[params.length-1]
+    //var filepath = '../video/' + req.body.filename;
+    var filepath = '../video/' + filename
 
     fs.exists(filepath, function(exists){
         if(!exists){
             res.json({
                 type : false,
-                data : req.body.filename + " doesn't exist"
+                data : filename + " doesn't exist"
             })
         } else {
-            console.log('sending file: ' + req.body.filename);
+            console.log('sending file: ' + filename);
             switch (path.extname(filepath)) {
                 case '.M3U8':
                     fs.readFile(filepath, function (err, contents) {
