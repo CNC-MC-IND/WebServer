@@ -3,6 +3,5 @@
  */
 module.exports = {
     'secret': 'NcSLaB2ol5',
-    'mongodbUri': 'mongodb://admin:admin@ds129183.mlab.com:29183/cnc',
     'organization' : 'sexion'
 }

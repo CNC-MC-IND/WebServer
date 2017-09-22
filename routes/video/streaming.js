@@ -7,9 +7,9 @@ var url = require('url');
 var path = require('path');
 var zlib = require('zlib');
 
-router.get('/', toolBox.checkPermission,function(req, res, next) {
+router.get('/', function(req, res, next) {
     var params = req.baseUrl.split('/')
-    var filename = params[params.length-1]
+    var filename = params[params.length-2] + "/" + params[params.length-1]
     //var filepath = '../video/' + req.body.filename;
     var filepath = '../video/' + filename
 
@@ -56,6 +56,34 @@ router.get('/', toolBox.checkPermission,function(req, res, next) {
                 case '.ts':
                     res.writeHead(200, { 'Content-Type':
                         'video/MP2T' });
+                    var stream = fs.createReadStream(filepath,
+                        { bufferSize: 64 * 1024 });
+                    stream.pipe(res);
+                    break;
+                case '.mp4':
+                    res.writeHead(200, { 'Content-Type':
+                        'video/mp4', 'Accept-Ranges': 'bytes' });
+                    var stream = fs.createReadStream(filepath,
+                        { bufferSize: 64 * 1024 });
+                    stream.pipe(res);
+                    break;
+                case '.h264':
+                    res.writeHead(200, { 'Content-Type':
+                        'video/h264', 'Cache-Control': 'no-cache','Pragma': 'no-cache' });
+                    var stream = fs.createReadStream(filepath,
+                        { bufferSize: 64 * 1024 });
+                    stream.pipe(res);
+                    break;
+                case '.avi':
+                    res.writeHead(200, { 'Content-Type':
+                        'video/avi', 'Accept-Ranges': 'bytes' });
+                    var stream = fs.createReadStream(filepath,
+                        { bufferSize: 64 * 1024 });
+                    stream.pipe(res);
+                    break;
+                case '.mjpg':
+                    res.writeHead(200, { 'Content-Type':
+                        'image/jpeg', 'Cache-Control': 'no-cache','Pragma': 'no-cache' });
                     var stream = fs.createReadStream(filepath,
                         { bufferSize: 64 * 1024 });
                     stream.pipe(res);

@@ -51,14 +51,13 @@ exports.broadcastPush = function (title, msg) {
 
                 fcm.send(message, function (err, response) {
                     if(err) throw err
-                    else console.log(response)
+                    //else console.log(response)
                 })
             }
             connexion.release();
         });
 
     })
-
-
 }
 
+exports.io = undefined

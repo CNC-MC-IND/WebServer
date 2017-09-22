@@ -6,8 +6,10 @@ var router = express.Router();
 var fs = require('fs');
 var toolBox = require('../../models/toolBox');
 
-router.get('/',toolBox.checkPermission ,function (req, res, next) {
-    fs.readdir('../video', function (err, list) {
+router.post('/',toolBox.checkPermission ,function (req, res, next) {
+    var dirID = req.body.id;
+
+    fs.readdir('../video/'+dirID, function (err, list) {
         if (err) {
             res.json({
                 type: false,
