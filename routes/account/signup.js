@@ -1,4 +1,5 @@
 var express = require('express');
+var bcrypt = require('bcryptjs');
 var router = express.Router();
 var mysql = require('mysql');
 const configDB = require('../../configDB');
@@ -9,7 +10,7 @@ fetch_unix_timestamp = function()
 {
     return Math.floor(new Date().getTime() / 1000);
 }
-
+// '/' change '/signup'
 router.post('/',function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
@@ -28,6 +29,8 @@ router.post('/',function(req, res, next) {
                 var organization = req.body.organization
                 var timestamp = fetch_unix_timestamp()
                 var password = req.body.password
+                var salt = bcrypt.genSaltSync(12);
+                password = bcrypt.hashSync(password,salt)
                 var token = '-'
                 var fcm = '-'
                                 
@@ -43,7 +46,7 @@ router.post('/',function(req, res, next) {
                     if(result.affectedRows > 0){
                         res.json({
                             type: true,
-                            data: email
+                            data: email,
                         })
                     }
                 })

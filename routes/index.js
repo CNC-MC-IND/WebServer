@@ -19,7 +19,9 @@ function whoAreYou(req, res, next){
 
 /* GET home page. */
 router.get('/', whoAreYou,function(req, res, next) {
-    res.render('index.pug', {title : config.organization, message:'HELLO!'});
+    //res.render('index.pug', {title : config.organization, message:'HELLO!'});
+    res.render('index',{title:config.organization, message:'Hello!'})
+
 });
 
 module.exports = router;

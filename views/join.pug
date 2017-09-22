@@ -37,30 +37,38 @@ html(lang='en')
                         .icons
                             a(href='/')
                                 i.halflings-icon.home
-                            a(href='/admin')
-                                i.halflings-icon.eye-open
-                        h2 Login to your account
-                        form.form-horizontal(action='/account/cert', method='post')
+                        h2 register to your account
+                        form.form-horizontal(action='/account/signup', method='post')
                             fieldset
-                                .input-prepend(title='Username')
+                                .input-prepend(title='Email')
                                     span.add-on
-                                        i.halflings-icon.user
-                                    input#username.input-large.span10(name='username', type='text', placeholder='type username', value=title)
+                                        i.halflings-icon.envelope
+                                    input#email.input-large.span10(name='email', type='text', placeholder='type email')
                                 .clearfix
+
                                 .input-prepend(title='Password')
                                     span.add-on
                                         i.halflings-icon.lock
-                                    input#password.input-large.span10(name='password', type='password', placeholder='type password', value=message)
+                                    input#passwd.input-large.span10(name='password', type='password', placeholder='type password')
+                                .clearfix
+
+                                .input-prepend(title='Organization')
+                                    span.add-on
+                                        i.halflings-icon.qrcode
+                                    input#organization.input-large.span10(name='organization', type='text', placeholder='type organization')
+                                .clearfix
+
+                                .input-prepend(title='Name')
+                                    span.add-on
+                                        i.halflings-icon.user
+                                    input#name.input-large.span10(name='name', type='text', placeholder='type name')
                                 .clearfix
 
                                 .button-login
-                                    button.btn.btn-primary(type='submit') Login
+                                    button.btn.btn-primary(type='submit') signup
                                 .clearfix
                         hr
-                        h3 Not registered yet?
-                        p
-                            | No problem,
-                            a(href='/join')  Create Account
+
 
                     // /span
                 // /row

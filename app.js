@@ -12,6 +12,7 @@ var pushScheduler = require('./models/pushScheduler')
 
 
 var index = require('./routes/index');
+var join = require('./routes/join');
 var establish = require('./routes/establish');
 var admin_users = require('./routes/admin/users');
 var admin_approve = require('./routes/admin/approve');
@@ -67,6 +68,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', index);
+app.use('/join', join);
 app.use('/establish', establish);
 app.use('/admin/users', admin_users);
 app.use('/admin/instant_query', admin_instantQuery)
