@@ -60,4 +60,4 @@ exports.broadcastPush = function (title, msg) {
     })
 }
 
-exports.io = undefined
+exports.videoConnexions = {}
