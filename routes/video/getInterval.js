@@ -14,6 +14,10 @@ router.get('/', function(req, res, next) {
             data: JSON.stringify(toolBox.videoConnexions)
         })
     } else {
+
+        if(toolBox.videoConnexions[id] === undefined)
+            toolBox.videoConnexions[id] = 70
+
         res.json({
             type : true,
             data: toolBox.videoConnexions[id]

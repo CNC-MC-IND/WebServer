@@ -1,9 +1,6 @@
 /**
  * Created by NCS-KSW on 2017-09-22.
  */
-/**
- * Created by NCS-KSW on 2017-08-21.
- */
 var express = require('express');
 var router = express.Router();
 var toolBox = require('../../models/toolBox');
