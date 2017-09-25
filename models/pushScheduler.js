@@ -39,34 +39,34 @@ exports.start = function () {
                             item.depletion
 
                         if (compVal) {
-                            msg = item.id.toString()
+                            msg = '['+item.id.toString()+'] '
 
                             if (item.lubricant_machine) {
-                                msg += '장비 윤활유 부족\n'
+                                msg += '장비 윤활유 부족/'
                             }
                             if (item.lubricant_sawr) {
-                                msg += '톱날 윤활유 부족\n'
+                                msg += '톱날 윤활유 부족/'
                             }
                             if (item.pressure_air_main) {
-                                msg += '메인 공기압 부족\n'
+                                msg += '메인 공기압 부족/'
                             }
                             if (item.pressure_oil_hydraulic) {
-                                msg += '유압유 압력 부족\n'
+                                msg += '유압유 압력 부족/'
                             }
                             if (item.servo_cut) {
-                                msg += '절단 서보 에러\n'
+                                msg += '절단 서보 에러/'
                             }
                             if (item.servo_transfer) {
-                                msg += '이송 서보 에러\n'
+                                msg += '이송 서보 에러/'
                             }
                             if (item.spindle) {
-                                msg += '스핀들 이상 에러\n'
+                                msg += '스핀들 이상 에러/'
                             }
                             if (item.safety_door) {
-                                msg += '안전문 이상\n'
+                                msg += '안전문 이상/'
                             }
                             if (item.depletion) {
-                                msg += '소재 부족\n'
+                                msg += '소재 부족/'
                             }
                         }
                         if (compVal == 1)
