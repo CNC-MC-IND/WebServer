@@ -25,7 +25,6 @@ var video_upload = require('./routes/video/upload');
 var video_list = require('./routes/video/list')
 var video_remove = require('./routes/video/remove')
 var video_streaming = require('./routes/video/streaming');
-var video_upstream = require('./routes/video/upstream');
 var video_downstream = require('./routes/video/downstream');
 var video_getInterval = require('./routes/video/getInterval')
 var video_setInterval = require('./routes/video/setInterval')
@@ -83,7 +82,6 @@ app.use('/video/upload', video_upload);
 app.use('/video/list', video_list);
 app.use('/video/remove', video_remove);
 app.use('/video/streaming/*', video_streaming);
-//app.use('/video/upstream', video_upstream);
 app.use('/video/downstream/*', video_downstream);
 app.use('/video/get_interval', video_getInterval)
 app.use('/video/set_interval', video_setInterval)
