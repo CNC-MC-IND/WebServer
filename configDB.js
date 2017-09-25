@@ -1,6 +1,6 @@
 module.exports = {
-    'host' : '210.125.31.25',
-    'port' : 443,
+    'host' : '210.125.29.221',
+    'port' : 3306,
     'user' : 'admin',
     'password' : 'admin',
     'database' : 'cnc_mc',
