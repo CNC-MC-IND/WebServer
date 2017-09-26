@@ -41,7 +41,11 @@ router.post('/',function(req, res, next) {
                     });
                     return;
                 }
-                connexion.query("INSERT INTO users (email, name, organization, timestamp, password, token, fcm) VALUES ('"+email+"', '"+name+"', '"+organization+"', "+timestamp+", '"+password+"', '"+token+"', '"+fcm+"')", function (err1, result) {
+
+                var query = "INSERT INTO users (email, name, organization, timestamp, password, token, fcm) VALUES (?,?,?,?,?,?,?)'
+                var params = [email, name, organization, timestamp, password, token, fcm];
+                //"INSERT INTO users (email, name, organization, timestamp, password, token, fcm) VALUES ('"+email+"', '"+name+"', '"+organization+"', "+timestamp+", '"+password+"', '"+token+"', '"+fcm+"')"
+                connexion.query(query, params, function (err1, result) {
                     if(err1) throw err1
                     if(result.affectedRows > 0){
                         res.json({
