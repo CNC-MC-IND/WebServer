@@ -7,6 +7,7 @@ var mysql = require('mysql');
 const configDB = require('../../configDB');
 var pool = mysql.createPool(configDB);
 var toolBox = require('../../models/toolBox');
+var bcrypt = require('bcryptjs');
 
 /* POST users listing. */
 router.post('/', function(req, res, next) {
@@ -25,7 +26,9 @@ router.post('/', function(req, res, next) {
                     });
                     return;
                 }
-                connexion.query("UPDATE users SET password = '" + req.body.password + "' WHERE email = '" + req.body.email + "'", function (err1, result) {
+                var salt = bcrypt.genSaltSync(12);
+                password = bcrypt.hashSync(req.body.password,salt)
+                connexion.query("UPDATE users SET password = '" + password + "' WHERE email = '" + req.body.email + "'", function (err1, result) {
                     if(err1) throw err1
                     if(result.affectedRows > 0){
                         res.json({
