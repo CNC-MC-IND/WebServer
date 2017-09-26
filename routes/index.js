@@ -4,7 +4,7 @@ var router = express.Router();
 
 function whoAreYou(req, res, next){
     var userAgent = req.get('User-Agent');
-
+    console.log('check User check User')
     if(userAgent !== undefined){
         var result = userAgent.match('Dalvik');
 
@@ -18,8 +18,7 @@ function whoAreYou(req, res, next){
 }
 
 /* GET home page. */
-router.get('/', whoAreYou,function(req, res, next) {
-    //res.render('index.pug', {title : config.organization, message:'HELLO!'});
+router.get('/', whoAreYou, function(req, res, next) {
     res.render('index',{title:config.organization, message:'Hello!'})
 
 });
