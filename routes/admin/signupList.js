@@ -14,11 +14,13 @@ router.get('/', function(req, res, next) {
             if (err)
                 throw err;
 
-            console.log(rows)
-            res.json({
+            console.log(rows);
+            res.render(approve,{rows:rows});
+            /*res.json({
                 type : true,
                 data : JSON.stringify(rows)
             });
+            */
             connexion.release();
         });
     })

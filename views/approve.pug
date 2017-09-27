@@ -1,0 +1,79 @@
+doctype html
+html(lang='en')
+    head
+        // start: Meta
+        meta(charset='utf-8')
+        title Bootstrap Metro Dashboard by Dennis Ji for ARM demo
+        meta(name='description', content='Bootstrap Metro Dashboard')
+        meta(name='author', content='Dennis Ji')
+        meta(name='keyword', content='Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina')
+        // end: Meta
+        // start: Mobile Specific
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        // end: Mobile Specific
+        // start: CSS
+        link#bootstrap-style(href='css/bootstrap.min.css', rel='stylesheet')
+        link(href='css/bootstrap-responsive.min.css', rel='stylesheet')
+        link#base-style(href='css/style.css', rel='stylesheet')
+        link#base-style-responsive(href='css/style-responsive.css', rel='stylesheet')
+        link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext', rel='stylesheet', type='text/css')
+        // end: CSS
+        // The HTML5 shim, for IE6-8 support of HTML5 elements
+        //if lt IE 9
+          script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+          link#ie-style(href='css/ie.css', rel='stylesheet')
+        //if IE 9
+          link#ie9style(href='css/ie9.css', rel='stylesheet')
+        // start: Favicon
+        link(rel='shortcut icon', href='img/favicon.ico')
+        // end: Favicon
+        style(type='text/css').
+            body { background: url(img/bg-login.jpg) !important; }
+
+
+    body
+        .container-fluid-full
+            .row-fluid
+                .row-fluid
+                    .box.span12
+                        .box-header(data-original-title='')
+                            h2
+                                i.halflings-icon.white.edit
+                                span.break
+                                | Admin Page
+
+                        .box-content
+                            form.form-horizontal
+                                fieldset
+                                    each row in rows
+                                        .task.high
+                                            .desc
+                                                .email=row.email
+                                                - var str = eval('name : ' + row.name + ', organization : ' + row.organization)
+                                                div #{str}
+                                            .time
+                                                button#btn_approve.btn(type='button' ) approve
+
+
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+        script(type='text/javascript').
+            var data = {email : 'jinhwajung93@gmail.com'}
+            function _ajax_request(url, data, callback, method) {
+                return jQuery.ajax({
+                    url: url,
+                    type: method,
+                    data: data,
+                    success: callback
+                });
+            }
+
+
+        script(type="text/javascript").
+            var xmlHttp = getNewHTTPObject();
+
+            function sendPut(url){
+                var mimeType = "text/plain";
+                xmlHttp.open('PUT', url, true)
+                xmlHttp.setRequestHeader('Content-Type', mimeType)
+                xmlHttp.send()
+            }
