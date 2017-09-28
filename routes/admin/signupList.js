@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
                 throw err;
 
             console.log(rows);
-            res.render(approve,{rows:rows});
+            res.render('approve',{rows:rows});
             /*res.json({
                 type : true,
                 data : JSON.stringify(rows)

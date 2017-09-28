@@ -12,10 +12,10 @@ html(lang='en')
         meta(name='viewport', content='width=device-width, initial-scale=1')
         // end: Mobile Specific
         // start: CSS
-        link#bootstrap-style(href='css/bootstrap.min.css', rel='stylesheet')
-        link(href='css/bootstrap-responsive.min.css', rel='stylesheet')
-        link#base-style(href='css/style.css', rel='stylesheet')
-        link#base-style-responsive(href='css/style-responsive.css', rel='stylesheet')
+        link#bootstrap-style(href='../css/bootstrap.min.css', rel='stylesheet')
+        link(href='../css/bootstrap-responsive.min.css', rel='stylesheet')
+        link#base-style(href='../css/style.css', rel='stylesheet')
+        link#base-style-responsive(href='../css/style-responsive.css', rel='stylesheet')
         link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext', rel='stylesheet', type='text/css')
         // end: CSS
         // The HTML5 shim, for IE6-8 support of HTML5 elements
@@ -25,10 +25,10 @@ html(lang='en')
         //if IE 9
           link#ie9style(href='css/ie9.css', rel='stylesheet')
         // start: Favicon
-        link(rel='shortcut icon', href='img/favicon.ico')
+        link(rel='shortcut icon', href='../img/favicon.ico')
         // end: Favicon
         style(type='text/css').
-            body { background: url(img/bg-login.jpg) !important; }
+            body { background: url(../img/bg-login.jpg) !important; }
 
 
     body
@@ -48,11 +48,12 @@ html(lang='en')
                                     each row in rows
                                         .task.high
                                             .desc
-                                                .email=row.email
-                                                - var str = eval('name : ' + row.name + ', organization : ' + row.organization)
-                                                div #{str}
+                                                .title=row.email
+                                                div= 'name : ' + row.name
                                             .time
-                                                button#btn_approve.btn(type='button' ) approve
+                                                .date
+                                                    button.btn_approve.btn(type='button' style='float: right;') approve
+                                                div  &nbsp;
 
 
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
