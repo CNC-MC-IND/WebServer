@@ -52,7 +52,8 @@ html(lang='en')
                                                 div= 'name : ' + row.name
                                             .time
                                                 .date
-                                                    button.btn_approve.btn(type='button' style='float: right;') approve
+                                                    -var method = "PutRequest(\"" + row.email+"\")"
+                                                    button.btn_approve.btn(type='button' style='float: right;' onclick=method) approve
                                                 div  &nbsp;
 
 
@@ -67,14 +68,9 @@ html(lang='en')
                     success: callback
                 });
             }
-
-
-        script(type="text/javascript").
-            var xmlHttp = getNewHTTPObject();
-
-            function sendPut(url){
-                var mimeType = "text/plain";
-                xmlHttp.open('PUT', url, true)
-                xmlHttp.setRequestHeader('Content-Type', mimeType)
-                xmlHttp.send()
+            function PutRequest(data) {
+                _ajax_request("/admin/approve",{email: data}, function(){
+                    alert("SUCCESS");
+                    location.reload();
+                },'PUT');
             }
