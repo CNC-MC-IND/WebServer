@@ -40,7 +40,7 @@ html(lang='en')
                             a(href='/admin/signupList')
                                 i.halflings-icon.eye-open
                         h2 Login to your account
-                        form.form-horizontal(action='/account/cert', method='post')
+                        form.form-horizontal(action='javascript:PostRequestCert()')
                             fieldset
                                 .input-prepend(title='Username')
                                     span.add-on
@@ -74,6 +74,35 @@ html(lang='en')
                     li
                         a(href='http://themescloud.org') Bootstrap themes
         // start: JavaScript
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+        script(type='text/javascript').
+            function _ajax_request(url, data, callback, method, returnType) {
+                return jQuery.ajax({
+                    url: url,
+                    type: method,
+                    data: data,
+                    success: callback,
+                    dataType : returnType
+                });
+            }
+            function PutRequest(data) {
+                _ajax_request("/admin/approve", {email: data}, function () {
+                    alert("SUCCESS");
+                    location.reload();
+                }, 'PUT');
+            }
+            function PostRequestCert(){
+                var email = document.getElementById("username").value;
+                var password = document.getElementById("password").value;
+                _ajax_request('/account/cert',{email: email,password:password},function(data){
+                    //alert(data.token)
+                    sessionStorage["token"] = data.token
+                },'POST', 'json')
+            }
+            function testFunction() {
+                alert("test function")
+            }
+
         script(src='js/jquery-1.9.1.min.js')
         script(src='js/jquery-migrate-1.0.0.min.js')
         script(src='js/jquery-ui-1.10.0.custom.min.js')
