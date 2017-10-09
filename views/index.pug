@@ -102,10 +102,8 @@ html(lang='en')
                         notifyMe(date.toUTCString())
 
                         _ajax_request('/data/renewed_data',"",function(data){
-                            var rows = JSON.parse(data.data)
                             sessionStorage.setItem('data',data.data)
 
-                            var b = JSON.parse(sessionStorage['data'])
 
                             location.replace('/main')
                         },"GET","json",sessionStorage['token'])

@@ -95,4 +95,67 @@ html(lang='en')
 
 
             }
+
+            playtest = setInterval(function () {
+                GetRenewedData();
+
+                var data = sessionStorage.getItem("data");
+
+                data = JSON.parse(data);
+
+                var tbody = document.getElementById('listtable');
+                for(var i=0; i<tbody.childElementCount;i++){
+                    var id = data[i]['id']
+                    var workload = data[i]['workload']
+                    var current = workload & 65535;
+                    var total = workload >> 16;
+
+                    var fraction = current + "/" + total;
+                    var percent = current / total * 100;
+                    percent = percent.toFixed(2)
+
+                    var row = tbody.childNodes[i]
+
+                    row.innerHTML = "<td style=\"width:10%;\">Device #" + id + "</td>\n" +
+                        "\t\t\t\t\t\t\t\t\t<td>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t<div>작업량: " + percent + "% <span>&nbsp;(" + fraction + ")</span></div>\n" +
+                        "\n" +
+                        "\t\t\t\t\t\t\t\t\t\t<div class=\"progress progress-striped progress-success active\">\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t<div class=\"bar\" style=\"width: " + percent + "%;\"></div>\n" +
+                        "\n" +
+                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t\t\t\t\t</td>\n" +
+                        "\t\t\t\t\t\t\t\t\t<td style=\"width:10%;\">\n" +
+                        "\t\t\t\t\t\t\t\t\t\t<div>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\" href=\'/\'>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"icon-fullscreen\"></i>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t\t<p>detail</p>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t\t</a>\n" +
+                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t\t\t\t\t</td>"
+                }
+
+                }, 5000)
+
+
+            function _ajax_request(url, data, callback, method, returnType, auth) {
+                return jQuery.ajax({
+                    url: url,
+                    type: method,
+                    data: data,
+                    success: callback,
+                    dataType: returnType,
+                    headers: {
+                        authorization: auth
+                    }
+                });
+            }
+
+            function GetRenewedData() {
+                _ajax_request('/data/renewed_data', "", function (data) {
+                    sessionStorage.setItem('data', data.data)
+
+                }, "GET", "json", sessionStorage['token'])
+            }
+
 // end: JavaScript
