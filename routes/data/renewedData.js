@@ -15,6 +15,7 @@ router.get('/', toolBox.checkPermission,function(req, res, next) {
         connexion.query(configDB.query_data, function (err, rows) {
             if (err)
                 throw err;
+
             res.json({
                 type : true,
                 data : JSON.stringify(rows)

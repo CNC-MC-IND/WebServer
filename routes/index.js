@@ -4,7 +4,6 @@ var router = express.Router();
 
 function whoAreYou(req, res, next){
     var userAgent = req.get('User-Agent');
-    console.log('check User check User')
     if(userAgent !== undefined){
         var result = userAgent.match('Dalvik');
 
