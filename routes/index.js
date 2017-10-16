@@ -18,7 +18,7 @@ function whoAreYou(req, res, next){
 
 /* GET home page. */
 router.get('/', whoAreYou, function(req, res, next) {
-    res.render('index',{title:config.organization, message:'Hello!'})
+    res.render('index',{title:"email" , message:'email'})
 
 });
 

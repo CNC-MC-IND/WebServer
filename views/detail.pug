@@ -41,7 +41,8 @@ html(lang='en')
                                 .box.span12
                                     .box-header
                                         h2
-                                            i.halflings-icon.white.th
+                                            a(href='/main')
+                                                i.halflings-icon.white.th
                                             span.break
                                             | Tabs
                                     .box-content
@@ -59,10 +60,16 @@ html(lang='en')
                                                             th=deviceid
                                                             th
                                                             th
-                                                    tbody#detaillist
+                                                    tbody#infolist
                                             #camera.tab-pane
                                                 div(align='center')
-                                                    video(src='WebServer/../video/1/rec_170925_141301.mp4', controls='controls')
+                                                    video(src='', controls='controls' id='view' width='640px' height='480px')
+                                                hr
+                                                table.table(align='center' style='width:80%;')
+                                                    thead
+                                                        tr
+                                                            th="Device #"+deviceid
+                                                    tbody#cameralist
                         hr
                     // /span
                 // /row
@@ -78,31 +85,31 @@ html(lang='en')
         // start: JavaScript
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
-            function init(){
+            function init() {
                 var data = sessionStorage.getItem("data");
-                var deviceid =!{deviceid};
+                var deviceid = !{deviceid};
                 data = JSON.parse(data);
 
-                for(var i =0; i < data.length; ++i){
-                    if(data[i]['id'] ==deviceid){
+                for (var i = 0; i < data.length; ++i) {
+                    if (data[i]['id'] == deviceid) {
                         var current_device = data[i]
-                        var lubricant_machine = current_device['lubricant_machine']? true: false; //장비 윤활유 부족
-                        var lubricant_saw = current_device['lubricant_saw']? true: false; //톱날 윤활유 부족
-                        var pressure_air_main = current_device['pressure_air_main']? true: false; //메인 공기압 부족
-                        var pressure_oil_hydraulic = current_device['pressure_oil_hydraulic']? true: false; //유압유 압력 부족
-                        var servo_cut = current_device['servo_cut']? true: false; //절단 서보 에러
-                        var servo_transfer = current_device['servo_transfer']? true: false; //이송 서보 에러
-                        var spindle = current_device['spindle']? true: false; //스핀들 이상 에러
-                        var safety_door = current_device['safety_door']? true: false; //안전문 이상
-                        var depletion = current_device['depletion']? true: false; //소제 부족
+                        var lubricant_machine = current_device['lubricant_machine'] ? true : false; //장비 윤활유 부족
+                        var lubricant_saw = current_device['lubricant_saw'] ? true : false; //톱날 윤활유 부족
+                        var pressure_air_main = current_device['pressure_air_main'] ? true : false; //메인 공기압 부족
+                        var pressure_oil_hydraulic = current_device['pressure_oil_hydraulic'] ? true : false; //유압유 압력 부족
+                        var servo_cut = current_device['servo_cut'] ? true : false; //절단 서보 에러
+                        var servo_transfer = current_device['servo_transfer'] ? true : false; //이송 서보 에러
+                        var spindle = current_device['spindle'] ? true : false; //스핀들 이상 에러
+                        var safety_door = current_device['safety_door'] ? true : false; //안전문 이상
+                        var depletion = current_device['depletion'] ? true : false; //소제 부족
 
                         var workload = current_device['workload'];
                         var workload_current = workload & 65535;
                         var workload_total = workload >>> 16;
-                        workload = workload_current+"/"+workload_total;
+                        workload = workload_current + "/" + workload_total;
 
                         var timestamp = current_device['timestamp'];
-                        timestamp = new Date(timestamp*1000);
+                        timestamp = new Date(timestamp * 1000);
                         timestamp = timestamp.toUTCString();
 
                         var json = {
@@ -119,8 +126,8 @@ html(lang='en')
                             "마지막 갱신시간": timestamp
                         };
 
-                        for(key in json){
-                            var tbody = document.getElementById('detaillist');
+                        for (key in json) {
+                            var tbody = document.getElementById('infolist');
                             var row = tbody.insertRow(tbody.rows.length); //하단 추가
 
                             var flag = '';
@@ -139,9 +146,8 @@ html(lang='en')
                     }
                 }
 
-
+                GetCameraList();
             }
-
             playtest = setInterval(function(){
                 GetRenewedData();
                 var data = sessionStorage.getItem("data");
@@ -174,7 +180,7 @@ html(lang='en')
                             "안전 도어 이상":safety_door,"소재 여유량 상태" : depletion,"작업량":workload,"마지막 갱신시간":timestamp};
                         var i =0;
                         for(key in json){
-                            var tbody = document.getElementById('detaillist');
+                            var tbody = document.getElementById('infolist');
                             var row = tbody.childNodes[i];
 
                             var flag = '';
@@ -215,6 +221,30 @@ html(lang='en')
                     sessionStorage.setItem('data', data.data)
 
                 }, "GET", "json", sessionStorage['token'])
+            }
+
+            function GetCameraList(){
+                _ajax_request('/video/list',{id:!{deviceid}},function(data){
+                    var cameralist = JSON.parse(data.data)
+
+                    cameralist.forEach(function(item, index, array){
+                        var tbody = document.getElementById('cameralist');
+                        var row = tbody.insertRow(tbody.rows.length); //하단 추가
+
+                        row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
+
+                    })
+
+                },"POST","json",sessionStorage['token'])
+
+            }
+            function GetStreaming(url){
+                _ajax_request('/video/streaming/'+!{deviceid}+'/'+url,'',function(){
+                    var view = document.getElementById('view');
+                    view.src = '/video/streaming/'+!{deviceid}+'/'+url;
+
+
+                },"GET")
             }
 
 
