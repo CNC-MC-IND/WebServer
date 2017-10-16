@@ -226,7 +226,7 @@ html(lang='en')
             function GetCameraList(){
                 _ajax_request('/video/list',{id:!{deviceid}},function(data){
                     var cameralist = JSON.parse(data.data)
-
+                    cameralist = cameralist.reverse()
                     cameralist.forEach(function(item, index, array){
                         var tbody = document.getElementById('cameralist');
                         var row = tbody.insertRow(tbody.rows.length); //하단 추가
