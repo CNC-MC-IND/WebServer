@@ -1,22 +1,24 @@
-var toolBox = require('./toolBox')
+var toolBox = require('./toolBox');
 var mysql = require('mysql');
 const configDB = require('../configDB');
+const notifier = require('node-notifier');
+
 var pool = mysql.createPool(configDB);
-var compVal = 0
-var loopFlag = true
-var async = require('async')
-var delay = 10000
+var compVal = 0;
+var loopFlag = true;
+var async = require('async');
+var delay = 10000;
 
 exports.start = function () {
-    loopFlag = true
+    loopFlag = true;
     async.forever(
         function (next) {
             if (!loopFlag) {
-                console.log('pushScheduler stopped!')
+                console.log('pushScheduler stopped!');
                 return
             }
 
-            console.log('pushScheduler started!')
+            console.log('pushScheduler started!');
             pool.getConnection(function (err, connexion) {
                 if (err)
                     throw err;
@@ -24,10 +26,10 @@ exports.start = function () {
                     if (err)
                         throw err;
 
-                    var item
-                    var msg = ''
+                    var item;
+                    var msg = '';
                     for (var i = 0; i < rows.length; i++) {
-                        item = rows[i]
+                        item = rows[i];
                         compVal |= item.lubricant_machine |
                             item.lubricant_saw |
                             item.pressure_air_main |
@@ -39,7 +41,7 @@ exports.start = function () {
                             item.depletion
 
                         if (compVal) {
-                            msg = '['+item.id.toString()+'] '
+                            msg = '['+item.id.toString()+'] ';
 
                             if (item.lubricant_machine) {
                                 msg += '장비 윤활유 부족/'
@@ -71,6 +73,7 @@ exports.start = function () {
                         }
                         if (compVal == 1)
                             toolBox.broadcastPush(msg)
+
                     }
                     connexion.release();
                 });
