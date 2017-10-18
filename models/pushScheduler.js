@@ -1,7 +1,6 @@
 var toolBox = require('./toolBox');
 var mysql = require('mysql');
 const configDB = require('../configDB');
-const notifier = require('node-notifier');
 
 var pool = mysql.createPool(configDB);
 var compVal = 0;
