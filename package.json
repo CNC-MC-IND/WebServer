@@ -20,6 +20,7 @@
     "morgan": "~1.8.1",
     "mysql": "2.11.1",
     "noptify": "0.0.3",
+    "notifyjs": "^3.0.0",
     "oncemore": "^1.0.0",
     "pug": "^2.0.0-rc.3",
     "readable-stream": "^2.0.2",

@@ -53,6 +53,7 @@ html(lang='en')
                     li
                         a(href='http://themescloud.org') Bootstrap themes
         // start: JavaScript
+        script(src='js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
             function init(){
@@ -74,22 +75,21 @@ html(lang='en')
                     var row = tbody.insertRow(tbody.rows.length); // 하단에 추가
 
                     row.innerHTML = "<td style=\"width:10%;\">Device #"+id+"</td>\n" +
-                        "\t\t\t\t\t\t\t\t\t<td>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div>작업량: "+percent+"% <span>&nbsp;("+fraction+")</span></div>\n" +
+                        "<td>\n" +
+                        "<div>작업량: "+percent+"% <span>&nbsp;("+fraction+")</span></div>\n" +
                         "\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div class=\"progress progress-striped progress-success active\">\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t<div class=\"bar\" style=\"width: "+percent+"%;\"></div>\n" +
-                        "\n" +
-                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
-                        "\t\t\t\t\t\t\t\t\t</td>\n" +
-                        "\t\t\t\t\t\t\t\t\t<td style=\"width:10%;\">\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\" href=\'/main/"+id+"\'>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"icon-fullscreen\"></i>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t\t<p>detail</p>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t</a>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
-                        "\t\t\t\t\t\t\t\t\t</td>"
+                        "<div class=\"progress progress-striped progress-success active\">\n" +
+                        "<div class=\"bar\" style=\"width: "+percent+"%;\"></div>\n" +
+                        "</div>\n" +
+                        "</td>\n" +
+                        "<td style=\"width:10%;\">\n" +
+                        "<div>\n" +
+                        "<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\" href=\'/main/"+id+"\'>\n" +
+                        "<i class=\"icon-fullscreen\"></i>\n" +
+                        "<p>detail</p>\n" +
+                        "</a>\n" +
+                        "</div>\n" +
+                        "</td>"
 
                 }
 
@@ -117,22 +117,20 @@ html(lang='en')
                     var row = tbody.childNodes[i]
 
                     row.innerHTML = "<td style=\"width:10%;\">Device #" + id + "</td>\n" +
-                        "\t\t\t\t\t\t\t\t\t<td>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div>작업량: " + percent + "% <span>&nbsp;(" + fraction + ")</span></div>\n" +
-                        "\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div class=\"progress progress-striped progress-success active\">\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t<div class=\"bar\" style=\"width: " + percent + "%;\"></div>\n" +
-                        "\n" +
-                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
-                        "\t\t\t\t\t\t\t\t\t</td>\n" +
-                        "\t\t\t\t\t\t\t\t\t<td style=\"width:10%;\">\n" +
-                        "\t\t\t\t\t\t\t\t\t\t<div>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\"href=\'/main/"+id+"\'>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t\t<i class=\"icon-fullscreen\"></i>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t\t<p>detail</p>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t\t</a>\n" +
-                        "\t\t\t\t\t\t\t\t\t\t</div>\n" +
-                        "\t\t\t\t\t\t\t\t\t</td>"
+                        "<td>\n" +
+                        "<div>작업량: " + percent + "% <span>&nbsp;(" + fraction + ")</span></div>\n" +
+                        "<div class=\"progress progress-striped progress-success active\">\n" +
+                        "<div class=\"bar\" style=\"width: " + percent + "%;\"></div>\n" +
+                        "</div>\n" +
+                        "</td>\n" +
+                        "<td style=\"width:10%;\">\n" +
+                        "<div>\n" +
+                        "<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\"href=\'/main/"+id+"\'>\n" +
+                        "<i class=\"icon-fullscreen\"></i>\n" +
+                        "<p>detail</p>\n" +
+                        "</a>\n" +
+                        "</div>\n" +
+                        "</td>"
                 }
 
                 }, 5000)
@@ -151,9 +149,87 @@ html(lang='en')
                 });
             }
 
+            function doNotification(title, message, tag) {
+                var myNotification = new Notify(title, {
+                    body: message,
+                    tag: tag,
+
+                    timeout: 4
+                });
+
+                myNotification.show();
+            }
+
             function GetRenewedData() {
                 _ajax_request('/data/renewed_data', "", function (data) {
                     sessionStorage.setItem('data', data.data)
+
+                    var newdata = JSON.parse(data.data);
+
+                    for (var i = 0; i < newdata.length; ++i) {
+                        var current_device = newdata[i]
+                        var lubricant_machine = current_device['lubricant_machine'] ? true : false; //장비 윤활유 부족
+                        var lubricant_saw = current_device['lubricant_saw'] ? true : false; //톱날 윤활유 부족
+                        var pressure_air_main = current_device['pressure_air_main'] ? true : false; //메인 공기압 부족
+                        var pressure_oil_hydraulic = current_device['pressure_oil_hydraulic'] ? true : false; //유압유 압력 부족
+                        var servo_cut = current_device['servo_cut'] ? true : false; //절단 서보 에러
+                        var servo_transfer = current_device['servo_transfer'] ? true : false; //이송 서보 에러
+                        var spindle = current_device['spindle'] ? true : false; //스핀들 이상 에러
+                        var safety_door = current_device['safety_door'] ? true : false; //안전문 이상
+                        var depletion = current_device['depletion'] ? true : false; //소제 부족
+                        var workload = current_device['workload'];
+                        var workload_current = workload & 65535;
+                        var workload_total = workload >>> 16;
+                        workload = workload_current + '/' + workload_total;
+
+                        var timestamp = current_device['timestamp'];
+                        timestamp = new Date(timestamp * 1000);
+                        timestamp = timestamp.toUTCString();
+
+                        var json = {
+                            "장비 윤활유 상태": lubricant_machine,
+                            "톱날 윤활유 상태": lubricant_saw,
+                            "메인 공기압 상태": pressure_air_main,
+                            "윤활유 압력 상태": pressure_oil_hydraulic,
+                            "절단 서보 모터 상태": servo_cut,
+                            "이송 서보 상태": servo_transfer,
+                            "스핀들 모터 상태": spindle,
+                            "안전 도어 이상": safety_door,
+                            "소재 여유량 상태": depletion,
+                            "작업량": workload,
+                            "마지막 갱신시간": timestamp
+                        };
+                        var compVal = 0;
+                        var msg = '';
+                        for (key in json)
+                            compVal |= json[key]
+
+                        if (compVal) {
+                            msg = '[' + current_device['id'] + '] '
+
+                            if (lubricant_machine)
+                                msg += '장비 윤활유 부족/'
+                            if (lubricant_saw)
+                                msg += '톱날 윤활유 부족/'
+                            if (pressure_air_main)
+                                msg += '메인 공기압 부족/'
+                            if (pressure_oil_hydraulic)
+                                msg += '유압유 압력 부족/'
+                            if (servo_cut)
+                                msg += '절단 서보 에러/'
+                            if (servo_transfer)
+                                msg += '이송 서보 에러/'
+                            if (spindle)
+                                msg += '스핀들 이상 에러/'
+                            if (safety_door)
+                                msg += '안전문 이상/'
+                            if (depletion)
+                                msg += '소재 부족/'
+                        }
+                        if (!Notify.needsPermission)
+                            doNotification("", msg, i);
+                    }
+
 
                 }, "GET", "json", sessionStorage['token'])
             }

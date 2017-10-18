@@ -74,8 +74,22 @@ html(lang='en')
                     li
                         a(href='http://themescloud.org') Bootstrap themes
         // start: JavaScript
+        script(src='js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
+
+            function doNotification(title, message) {
+                var myNotification = new Notify(title, {
+                    body: message,
+                    tag: 'My unique id',
+
+                    timeout: 4
+                });
+
+                myNotification.show();
+            }
+
+
             function _ajax_request(url, data, callback, method, returnType, auth) {
                 return jQuery.ajax({
                     url: url,
@@ -99,7 +113,8 @@ html(lang='en')
                     //account/validate GET
                     _ajax_request('/account/validate',"", function(data){
                         var date = new Date(data.timestamp*1000);
-                        notifyMe(date.toUTCString())
+                        if (!Notify.needsPermission)
+                            doNotification("마지막 접속 시간", date.toUTCString());
 
                         _ajax_request('/data/renewed_data',"",function(data){
                             sessionStorage.setItem('data',data.data)
@@ -111,41 +126,6 @@ html(lang='en')
 
                     },"GET",'json',sessionStorage["token"])
                 },'POST', 'json')
-            }
-
-            /////notification
-            function notifyMe(text) {
-                // Let's check if the browser supports notifications
-                if (!("Notification" in window)) {
-                    alert("This browser does not support desktop notification");
-                }
-
-                // Let's check whether notification permissions have already been granted
-                else if (Notification.permission === "granted") {
-                    // If it's okay let's create a notification
-                    var notification = new Notification("마지막 접속 시간 : "+text);
-                }
-
-                // Otherwise, we need to ask the user for permission
-                else if (Notification.permission !== 'denied') {
-                    Notification.requestPermission(function (permission) {
-                        // If the user accepts, let's create a notification
-                        if (permission === "granted") {
-                            var notification = new Notification("마지막 접속 시간 : "+text);
-                        }
-                    });
-                }
-
-                // At last, if the user has denied notifications, and you
-                // want to be respectful there is no need to bother them any more.
-            }Notification.requestPermission().then(function (result) {
-                console.log(result);
-            });function spawnNotification(theBody, theIcon, theTitle) {
-                var options = {
-                    body: theBody,
-                    icon: theIcon
-                }
-                var n = new Notification(theTitle, options);
             }
 
         script(src='js/jquery-1.9.1.min.js')
