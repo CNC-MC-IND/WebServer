@@ -10,6 +10,10 @@ fetch_unix_timestamp = function()
     return Math.floor(new Date().getTime() / 1000);
 };
 // '/' change '/signup'
+router.get('/', function(req, res){
+    res.render('signup')
+});
+
 router.post('/',function(req, res, next) {
     pool.getConnection(function (err, connexion) {
         if (err)
