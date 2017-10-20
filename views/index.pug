@@ -37,7 +37,7 @@ html(lang='en')
                         .icons
                             a(href='/')
                                 i.halflings-icon.home
-                            a(href='/admin/signupList')
+                            a(href='/admin/approve')
                                 i.halflings-icon.eye-open
                         h2 Login to your account
                         form.form-horizontal(action='javascript:PostRequestCert()')
@@ -45,12 +45,12 @@ html(lang='en')
                                 .input-prepend(title='Username')
                                     span.add-on
                                         i.halflings-icon.user
-                                    input#username.input-large.span10(name='username', type='email', placeholder='type username', value=title)
+                                    input#username.input-large.span10(name='username', type='email', placeholder='type email')
                                 .clearfix
                                 .input-prepend(title='Password')
                                     span.add-on
                                         i.halflings-icon.lock
-                                    input#password.input-large.span10(name='password', type='password', placeholder='type password', value=message)
+                                    input#password.input-large.span10(name='password', type='password', placeholder='type password')
                                 .clearfix
 
                                 .button-login
@@ -108,23 +108,27 @@ html(lang='en')
                 var password = document.getElementById("password").value;
                 //acount/cert POST
                 _ajax_request('/account/cert',{email: email,password:password},function(data){
+                    if(data.type){
+                        sessionStorage["token"] = data.token
+                        //account/validate GET
+                        _ajax_request('/account/validate',"", function(data){
+                            var date = new Date(data.timestamp*1000);
+                            if (!Notify.needsPermission)
+                                doNotification("마지막 접속 시간", date.toUTCString());
 
-                    sessionStorage["token"] = data.token
-                    //account/validate GET
-                    _ajax_request('/account/validate',"", function(data){
-                        var date = new Date(data.timestamp*1000);
-                        if (!Notify.needsPermission)
-                            doNotification("마지막 접속 시간", date.toUTCString());
-
-                        _ajax_request('/data/renewed_data',"",function(data){
-                            sessionStorage.setItem('data',data.data)
-
-
-                            location.replace('/main')
-                        },"GET","json",sessionStorage['token'])
+                            _ajax_request('/data/renewed_data',"",function(data){
+                                sessionStorage.setItem('data',data.data)
 
 
-                    },"GET",'json',sessionStorage["token"])
+                                location.replace('/main')
+                            },"GET","json",sessionStorage['token'])
+
+                        },"GET",'json',sessionStorage["token"])
+                    }else {
+                        alert(data.data)
+                        location.reload();
+                    }
+
                 },'POST', 'json')
             }
 

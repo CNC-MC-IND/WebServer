@@ -43,25 +43,25 @@ html(lang='en')
                                 .input-prepend(title='Email')
                                     span.add-on
                                         i.halflings-icon.envelope
-                                    input#email.input-large.span10(name='email', type='email', placeholder='type email')
+                                    input#email.input-large.span10(name='email', type='email', placeholder='type email', requIred)
                                 .clearfix
 
                                 .input-prepend(title='Password')
                                     span.add-on
                                         i.halflings-icon.lock
-                                    input#passwd.input-large.span10(name='password', type='password', placeholder='type password')
+                                    input#passwd.input-large.span10(name='password', type='password', placeholder='type password', required)
                                 .clearfix
 
                                 .input-prepend(title='Organization')
                                     span.add-on
                                         i.halflings-icon.qrcode
-                                    input#organization.input-large.span10(name='organization', type='text', placeholder='type organization')
+                                    input#organization.input-large.span10(name='organization', type='text', placeholder='type organization', required)
                                 .clearfix
 
                                 .input-prepend(title='Name')
                                     span.add-on
                                         i.halflings-icon.user
-                                    input#name.input-large.span10(name='name', type='text', placeholder='type name')
+                                    input#name.input-large.span10(name='name', type='text', placeholder='type name', required)
                                 .clearfix
 
                                 .button-login
@@ -84,13 +84,13 @@ html(lang='en')
         // start: JavaScript
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
-            function _ajax_request(url, data, callback, method, returnType) {
+            function _ajax_request(url, data, callback, method, error) {
                 return jQuery.ajax({
                     url: url,
                     type: method,
                     data: data,
                     success: callback,
-                    dataType: returnType
+                    error: error
                 });
             }
             function PostRequestSignup() {
@@ -98,10 +98,35 @@ html(lang='en')
                 var password = document.getElementById("passwd").value;
                 var organization = document.getElementById("organization").value;
                 var name = document.getElementById("name").value;
-                _ajax_request('/account/signup', {email: email, password: password, organization: organization, name: name}, function () {
-                    alert("계정 생성 완료")
-                    location.replace("/");
-                }, 'POST')
+                _ajax_request('/account/signup', {email: email, password: password, organization: organization, name: name}, function (data) {
+                    if(data.type){
+                        alert("계정 생성 완료");
+                        location.replace("/");
+                    }else
+                    {
+                        alert(data.data+'\n입력한 내용을 다시한번 확인해주세요');
+                        location.reload();
+                    }
+
+                }, 'POST', function (jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                })
             }
 
 

@@ -62,17 +62,41 @@ html(lang='en')
 
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
-            function _ajax_request(url, data, callback, method) {
+            function _ajax_request(url, data, callback, method, error) {
                 return jQuery.ajax({
                     url: url,
                     type: method,
                     data: data,
-                    success: callback
+                    success: callback,
+                    error: error
                 });
             }
             function PutRequest(data) {
-                _ajax_request("/admin/approve",{email: data}, function(){
-                    alert("SUCCESS");
-                    location.reload();
-                },'PUT');
+                _ajax_request("/admin/approve",{email: data}, function(data){
+                    if(data.type){
+                        alert("SUCCESS");
+                        location.reload();
+                    }else {
+                        alert(data.data);
+                        location.reload();
+                    }
+                },'PUT',function(jqXHR, exception){
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                });
             }
