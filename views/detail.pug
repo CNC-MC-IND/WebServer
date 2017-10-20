@@ -232,7 +232,7 @@ html(lang='en')
                 myNotification.show();
             }
 
-            function _ajax_request(url, data, callback, method, returnType, auth) {
+            function _ajax_request(url, data, callback, method, returnType, auth, error) {
                 return jQuery.ajax({
                     url: url,
                     type: method,
@@ -241,7 +241,8 @@ html(lang='en')
                     dataType: returnType,
                     headers: {
                         authorization: auth
-                    }
+                    },
+                    error: error
                 });
             }
 
@@ -315,28 +316,55 @@ html(lang='en')
                             doNotification("", msg, i);
                     }
 
-                }, "GET", "json", sessionStorage['token'])
+                }, "GET", "json", sessionStorage['token'],
+                    function (jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                })
             }
 
             function GetCameraList(){
                 _ajax_request('/video/list',{id:!{deviceid}},function(data){
-                    var cameralist = JSON.parse(data.data)
-                    cameralist = cameralist.reverse()
-                    cameralist.forEach(function(item, index, array){
-                        var tbody = document.getElementById('cameralist');
-                        var row = tbody.insertRow(tbody.rows.length); //하단 추가
+                    if(data.type){
+                        var cameralist = JSON.parse(data.data)
+                        cameralist = cameralist.reverse()
+                        cameralist.forEach(function(item, index, array){
+                            var tbody = document.getElementById('cameralist');
+                            var row = tbody.insertRow(tbody.rows.length); //하단 추가
 
-                        row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
+                            row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
 
-                    })
+                        })
+                    }else
+                        alert(data.data);
+
+
 
                 },"POST","json",sessionStorage['token'])
 
             }
             function GetStreaming(url){
-                _ajax_request('/video/streaming/'+!{deviceid}+'/'+url,'',function(){
-                    var view = document.getElementById('view');
-                    view.src = '/video/streaming/'+!{deviceid}+'/'+url;
+                _ajax_request('/video/streaming/'+!{deviceid}+'/'+url,'',function(data){
+                    if(data.type){
+                        var view = document.getElementById('view');
+                        view.src = '/video/streaming/'+!{deviceid}+'/'+url;
+                    }else
+                        alert(data.data);
 
                 },"GET")
             }

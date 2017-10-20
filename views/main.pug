@@ -136,7 +136,7 @@ html(lang='en')
                 }, 5000)
 
 
-            function _ajax_request(url, data, callback, method, returnType, auth) {
+            function _ajax_request(url, data, callback, method, returnType, auth, error) {
                 return jQuery.ajax({
                     url: url,
                     type: method,
@@ -145,7 +145,8 @@ html(lang='en')
                     dataType: returnType,
                     headers: {
                         authorization: auth
-                    }
+                    },
+                    error: error
                 });
             }
 
@@ -231,7 +232,26 @@ html(lang='en')
                     }
 
 
-                }, "GET", "json", sessionStorage['token'])
+                }, "GET", "json", sessionStorage['token'],
+                    function (jqXHR, exception) {
+                        var msg = '';
+                        if (jqXHR.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (jqXHR.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (jqXHR.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                        }
+                        alert(msg);
+                    })
             }
 
 // end: JavaScript
