@@ -17,6 +17,7 @@ html(lang='en')
         link#base-style(href='../css/style.css', rel='stylesheet')
         link#base-style-responsive(href='../css/style-responsive.css', rel='stylesheet')
         link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext', rel='stylesheet', type='text/css')
+        link(href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet')
         // end: CSS
         // The HTML5 shim, for IE6-8 support of HTML5 elements
         //
@@ -36,10 +37,10 @@ html(lang='en')
                 .span1
                 .row-fluid.span10
                     .box-content
-                        form.form-horizontal
+                        form.form-horizontal(width="100%")
                             fieldset
-                                .box.span12
-                                    .box-header
+                                .box.span12.sortable
+                                    .box-header(data-original-title)
                                         h2
                                             a(href='/main')
                                                 i.halflings-icon.white.th
@@ -65,11 +66,12 @@ html(lang='en')
                                                 div(align='center')
                                                     video(src='', controls='controls' id='view' width='640px' height='480px')
                                                 hr
-                                                table.table(align='center' style='width:80%;')
+                                                table#testTable.table.table-striped.table-bordered.bootstrap-datatable(align='center' cellspacing="0" width="80%")
                                                     thead
                                                         tr
                                                             th="Device #"+deviceid
                                                     tbody#cameralist
+
                         hr
                     // /span
                 // /row
@@ -85,6 +87,23 @@ html(lang='en')
         // start: JavaScript
         script(src='../js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+        script(type='text/javascript').
+            $(document).ready(function(){
+                var table = $('#testTable').DataTable();
+
+                $('#testTable').on('click','tr',function(){
+                    var data = table.row(this).data();
+                    var offset = $('#view').offset();
+
+                    GetStreaming(data[0]);
+                    $('html, body').animate({scrollTop : offset.top}, 400);
+                });
+
+                $('.row').attr('style','max-width:80%;')
+                $('#testTable_wrapper').attr('align','center')
+
+                }
+            )
         script(type='text/javascript').
             function init() {
                 var data = sessionStorage.getItem("data");
@@ -149,6 +168,7 @@ html(lang='en')
 
                 GetCameraList();
             }
+
             playtest = setInterval(function(){
                 GetRenewedData();
                 var data = sessionStorage.getItem("data");
@@ -157,9 +177,7 @@ html(lang='en')
 
                 for (var i = 0; i < data.length; ++i) {
 
-
-
-                    if (current_device['id'] == deviceid) {
+                    if (data[i]['id'] == deviceid) {
                         var current_device = data[i]
                         var lubricant_machine = current_device['lubricant_machine'] ? true : false; //장비 윤활유 부족
                         var lubricant_saw = current_device['lubricant_saw'] ? true : false; //톱날 윤활유 부족
@@ -210,7 +228,7 @@ html(lang='en')
                                  flag+
                                 "</td>\n";
 
-                            i++;
+                            a++;
                         }
 
                     }
@@ -343,11 +361,15 @@ html(lang='en')
                     if(data.type){
                         var cameralist = JSON.parse(data.data)
                         cameralist = cameralist.reverse()
-                        cameralist.forEach(function(item, index, array){
-                            var tbody = document.getElementById('cameralist');
-                            var row = tbody.insertRow(tbody.rows.length); //하단 추가
 
-                            row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
+                        cameralist.forEach(function(item, index, array){
+                            var t = $('#testTable').DataTable();
+                            var tbody = document.getElementById('cameralist');
+                            //var row = tbody.insertRow(tbody.rows.length); //하단 추가
+
+                            t.row.add([item]).draw(false);
+
+                            //row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
 
                         })
                     }else
@@ -360,13 +382,30 @@ html(lang='en')
             }
             function GetStreaming(url){
                 _ajax_request('/video/streaming/'+!{deviceid}+'/'+url,'',function(data){
-                    if(data.type){
-                        var view = document.getElementById('view');
-                        view.src = '/video/streaming/'+!{deviceid}+'/'+url;
-                    }else
-                        alert(data.data);
 
-                },"GET")
+                    var view = document.getElementById('view');
+                    view.src = '/video/streaming/'+!{deviceid}+'/'+url;
+
+
+                },"GET",'','', function (jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                })
             }
 
 
@@ -400,4 +439,8 @@ html(lang='en')
         script(src='../js/counter.js')
         script(src='../js/retina.js')
         script(src='../js/custom.js')
+        //script(src='../js/jquery.dataTables.min.js')
+        script(src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+        script(src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js')
+
         // end: JavaScript
