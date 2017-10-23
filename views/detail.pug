@@ -364,7 +364,7 @@ html(lang='en')
 
                         cameralist.forEach(function(item, index, array){
                             var t = $('#testTable').DataTable();
-                            var tbody = document.getElementById('cameralist');
+                            //var tbody = document.getElementById('cameralist');
                             //var row = tbody.insertRow(tbody.rows.length); //하단 추가
 
                             t.row.add([item]).draw(false);
@@ -372,6 +372,7 @@ html(lang='en')
                             //row.innerHTML = "<td class=\"center\"><a href='#view' onclick='GetStreaming(\""+item+"\")'>" + item + "</td>\n";
 
                         })
+                        //alert($('#testTable').DataTable().rows().count())
                     }else
                         alert(data.data);
 
