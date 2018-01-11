@@ -1,3 +1,49 @@
+Notify = function(text, callback, close_callback, style) {
+
+    var time = '3000';
+    var $container = $('#notifications');
+    var icon = '<i class="fa fa-info-circle "></i>';
+
+    if (typeof style == 'undefined' ) style = 'warning'
+
+    var html = $('<div class="alert alert-' + style + '  hide">' + icon +  " " + text + '</div>');
+
+    $('<a>',{
+        text: '×',
+        class: 'button close',
+        style: 'padding-left: 10px;',
+        href: '#',
+        click: function(e){
+            e.preventDefault()
+            close_callback && close_callback()
+            remove_notice()
+        }
+    }).prependTo(html)
+
+    $container.prepend(html)
+    html.removeClass('hide').hide().fadeIn('slow')
+
+    function remove_notice() {
+        html.stop().fadeOut('slow').remove()
+    }
+
+    var timer =  setInterval(remove_notice, time);
+
+    $(html).hover(function(){
+        clearInterval(timer);
+    }, function(){
+        timer = setInterval(remove_notice, time);
+    });
+
+    html.on('click', function () {
+        clearInterval(timer)
+        callback && callback()
+        remove_notice()
+    });
+
+
+}
+/*
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define(factory) :
@@ -21,13 +67,13 @@
 
         return target;
     };
-
+*/
     /*
      * Author: Alex Gibson
      * https://github.com/alexgibson/notify.js
      * License: MIT license
      */
-
+/*
     var N = window.Notification;
 
     function isFunction(item) {
@@ -207,3 +253,5 @@
     return Notify;
 
 })));
+*/
+

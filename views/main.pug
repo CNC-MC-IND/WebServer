@@ -17,6 +17,11 @@ html(lang='en')
         link#base-style(href='css/style.css', rel='stylesheet')
         link#base-style-responsive(href='css/style-responsive.css', rel='stylesheet')
         link(href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext', rel='stylesheet', type='text/css')
+        link(href='css/notify.css', rel='stylesheet')
+        link(href='http://getbootstrap.com/dist/css/bootstrap.min.css', rel='stylesheet')
+        link(href='http://fonts.googleapis.com/css?family=Cabin', rel='stylesheet', type='text/css')
+        link(href='http://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css', rel='stylesheet')
+        link(href='http://fonts.googleapis.com/css?family=Lato', rel='stylesheet', type='text/css')
         // end: CSS
         // The HTML5 shim, for IE6-8 support of HTML5 elements
         //if lt IE 9
@@ -45,6 +50,7 @@ html(lang='en')
                 // /row
             // /.fluid-container
         // /fluid-row
+        #notifications
         #common-Modal1.common-modal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
             .modal-content
                 ul.list-inline.item-details
@@ -227,15 +233,17 @@ html(lang='en')
                             if (depletion)
                                 msg += '소재 부족/'
                         }
-                        if (!Notify.needsPermission)
-                            doNotification("", msg, i);
+                        //if (!Notify.needsPermission)
+                        //    doNotification("", msg, i);
+                        Notify(msg, null, null,'danger');
+
                     }
 
 
                 }, "GET", "json", sessionStorage['token'],
                     function (jqXHR, exception) {
                         var msg = '';
-                        if (jqXHR.status === 0) {
+                        if (jqXHR.status === 0) {                           // 문제 발생?
                             msg = 'Not connect.\n Verify Network.';
                         } else if (jqXHR.status == 404) {
                             msg = 'Requested page not found. [404]';
