@@ -70,8 +70,9 @@ exports.start = function () {
                                 msg += '소재 부족/'
                             }
                         }
-                        if (compVal == 1)
+                        if (compVal == 1){
                             toolBox.broadcastPush(msg)
+                        }
 
                     }
                     connexion.release();

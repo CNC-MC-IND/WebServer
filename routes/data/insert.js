@@ -14,7 +14,7 @@ router.post('/',function(req, res, next) {
 
         var stringData = req.body.data
         var jsonData = JSON.parse(stringData)
-        var query = "INSERT into data (id, lubricant_machine, lubricant_saw, pressure_air_main, pressure_oil_hydraulic, servo_cut, servo_transfer, spindle, safety_door, depletion, workload, timestamp) VALUES"
+        var query = "INSERT into data (id, lubricant_machine, lubricant_saw, pressure_air_main, pressure_oil_hydraulic, servo_cut, servo_transfer, spindle, safety_door, depletion, total_workload, current_workload, timestamp) VALUES"
         for( var i=0; i<jsonData.length; i++){
             var data = jsonData[i]
 
@@ -29,7 +29,8 @@ router.post('/',function(req, res, next) {
                     data.spindle + ", " +
                     data.safety_door + ", " +
                     data.depletion + "," +
-                data.workload + ", " +
+                data.total_workload + ", " +
+                data.current_workload + ", " +
                 data.timestamp + ")"
 
             if(jsonData.length > 1 && i !== jsonData.length-1){

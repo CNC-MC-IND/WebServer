@@ -79,8 +79,7 @@ html(lang='en')
         script(src='js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
-
-            function doNotification(title, message) {
+            /*function doNotification(title, message) {
                 var myNotification = new Notify(title, {
                     body: message,
                     tag: 'My unique id',
@@ -90,7 +89,7 @@ html(lang='en')
 
                 myNotification.show();
             }
-
+            */
 
             function _ajax_request(url, data, callback, method, returnType, auth) {
                 return jQuery.ajax({
@@ -120,7 +119,7 @@ html(lang='en')
                             */
                             Notify("마지막 접속 시간 \n" + date.toUTCString());
                             _ajax_request('/data/renewed_data',"",function(data){
-                                sessionStorage.setItem('data',data.data)
+                                sessionStorage.setItem('data',data.data);
 
 
                                 location.replace('/main')

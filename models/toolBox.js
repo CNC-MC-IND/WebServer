@@ -42,8 +42,9 @@ exports.broadcastPush = function (title, msg) {
 
                 var message = {
                     registration_ids : registrationIds,
-                    collapse_key: 'jumpsnack',
-                    notification: {
+                    //collapse_key: 'jumpsnack',
+                    priority : 'high',
+                    data: {
                         title: title,
                         body: msg
                     }

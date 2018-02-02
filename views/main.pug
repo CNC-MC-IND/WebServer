@@ -69,9 +69,9 @@ html(lang='en')
 
                 for(var i = 0; i < data.length; i++){
                     var id = data[i]['id']
-                    var workload = data[i]['workload']
-                    var current = workload & 65535;
-                    var total = workload >> 16;
+                    var total = data[i]['total_workload'];
+                    var current = data[i]['current_workload'];
+
 
                     var fraction = current+"/"+total;
                     var percent = current/total *100;
@@ -113,8 +113,8 @@ html(lang='en')
                 for(var i=0; i<tbody.childElementCount;i++){
                     var id = data[i]['id']
                     var workload = data[i]['workload']
-                    var current = workload & 65535;
-                    var total = workload >> 16;
+                    var total = data[i]['total_workload'];
+                    var current = data[i]['current_workload'];
 
                     var fraction = current + "/" + total;
                     var percent = current / total * 100;
@@ -156,7 +156,7 @@ html(lang='en')
                 });
             }
 
-            function doNotification(title, message, tag) {
+            /*function doNotification(title, message, tag) {
                 var myNotification = new Notify(title, {
                     body: message,
                     tag: tag,
@@ -165,7 +165,7 @@ html(lang='en')
                 });
 
                 myNotification.show();
-            }
+            }*/
 
             function GetRenewedData() {
                 _ajax_request('/data/renewed_data', "", function (data) {
@@ -184,10 +184,9 @@ html(lang='en')
                         var spindle = current_device['spindle'] ? true : false; //스핀들 이상 에러
                         var safety_door = current_device['safety_door'] ? true : false; //안전문 이상
                         var depletion = current_device['depletion'] ? true : false; //소제 부족
-                        var workload = current_device['workload'];
-                        var workload_current = workload & 65535;
-                        var workload_total = workload >>> 16;
-                        workload = workload_current + '/' + workload_total;
+                        var workload_current = current_device['current_workload'];
+                        var workload_total = current_device['total_workload'];
+                        var workload = workload_current + '/' + workload_total;
 
                         var timestamp = current_device['timestamp'];
                         timestamp = new Date(timestamp * 1000);
