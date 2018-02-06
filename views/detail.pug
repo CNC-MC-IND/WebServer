@@ -32,7 +32,8 @@ html(lang='en')
             body {
                 background: url(../img/bg-login.jpg) !important;
             }
-    body(onload='init()')
+    //body(onload='init()')
+    body
         .container-fluid-full
             .row-fluid
                 .span1
@@ -89,23 +90,7 @@ html(lang='en')
         // start: JavaScript
         script(src='../js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
-        script(type='text/javascript').
-            $(document).ready(function(){
-                var table = $('#testTable').DataTable();
 
-                $('#testTable').on('click','tr',function(){
-                    var data = table.row(this).data();
-                    var offset = $('#view').offset();
-
-                    GetStreaming(data[0]);
-                    $('html, body').animate({scrollTop : offset.top}, 400);
-                });
-
-                $('.row').attr('style','max-width:80%;')
-                $('#testTable_wrapper').attr('align','center')
-
-                }
-            )
         script(type='text/javascript').
             function init() {
 
@@ -169,6 +154,22 @@ html(lang='en')
 
                 GetCameraList();
             }
+            $(document).ready(function () {
+                    var table = $('#testTable').DataTable();
+
+                    $('#testTable').on('click', 'tr', function () {
+                        var data = table.row(this).data();
+                        var offset = $('#view').offset();
+
+                        GetStreaming(data[0]);
+                        $('html, body').animate({scrollTop: offset.top}, 400);
+                    });
+
+                    $('.row').attr('style', 'max-width:80%;')
+                    $('#testTable_wrapper').attr('align', 'center')
+                    init();
+                }
+            )
 
             playtest = setInterval(function(){
                 GetRenewedData();
@@ -417,27 +418,7 @@ html(lang='en')
         script(src='../js/jquery.cookie.js')
         script(src='../js/fullcalendar.min.js')
         script(src='../js/jquery.dataTables.min.js')
-        script(src='../js/excanvas.js')
-        script(src='../js/jquery.flot.js')
-        script(src='../js/jquery.flot.pie.js')
-        script(src='../js/jquery.flot.stack.js')
-        script(src='../js/jquery.flot.resize.min.js')
-        script(src='../js/jquery.chosen.min.js')
-        script(src='../js/jquery.uniform.min.js')
-        script(src='../js/jquery.cleditor.min.js')
-        script(src='../js/jquery.noty.js')
-        script(src='../js/jquery.elfinder.min.js')
-        script(src='../js/jquery.raty.min.js')
-        script(src='../js/jquery.iphone.toggle.js')
-        script(src='../js/jquery.uploadify-3.1.min.js')
-        script(src='../js/jquery.gritter.min.js')
-        script(src='../js/jquery.imagesloaded.js')
-        script(src='../js/jquery.masonry.min.js')
-        script(src='../js/jquery.knob.modified.js')
-        script(src='../js/jquery.sparkline.min.js')
-        script(src='../js/counter.js')
-        script(src='../js/retina.js')
-        script(src='../js/custom.js')
+
         //script(src='../js/jquery.dataTables.min.js')
         script(src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
         script(src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js')
