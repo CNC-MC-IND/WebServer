@@ -52,7 +52,7 @@ exports.start = function () {
                                 msg += '메인 공기압 부족/'
                             }
                             if (item.pressure_oil_hydraulic) {
-                                msg += '유압유 압력 부족/'
+                                msg += '윤활유 압력 부족/'
                             }
                             if (item.servo_cut) {
                                 msg += '절단 서보 에러/'
@@ -64,7 +64,7 @@ exports.start = function () {
                                 msg += '스핀들 이상 에러/'
                             }
                             if (item.safety_door) {
-                                msg += '안전문 이상/'
+                                msg += '안전 도어 이상/'
                             }
                             if (item.depletion) {
                                 msg += '소재 부족/'
