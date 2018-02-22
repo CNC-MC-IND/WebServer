@@ -102,44 +102,61 @@ html(lang='en')
 
             }
 
-            playtest = setInterval(function () {
-                GetRenewedData();
+            playtest = setInterval(GetRenewedData, 5000)
 
-                var data = sessionStorage.getItem("data");
+            function notification() {
 
-                data = JSON.parse(data);
+                var newdata = sessionStorage.getItem("data")
+                newdata = JSON.parse(newdata);
 
-                var tbody = document.getElementById('listtable');
-                for(var i=0; i<tbody.childElementCount;i++){
-                    var id = data[i]['id']
-                    var workload = data[i]['workload']
-                    var total = data[i]['total_workload'];
-                    var current = data[i]['current_workload'];
+                for (var i = 0; i < newdata.length; ++i) {
+                    var current_device = newdata[i]
+                    var workload_current = current_device['current_workload'];
+                    var workload_total = current_device['total_workload'];
+                    var workload = workload_current + '/' + workload_total;
 
-                    var fraction = current + "/" + total;
-                    var percent = current / total * 100;
-                    percent = percent.toFixed(2)
+                    var timestamp = current_device['timestamp'];
+                    timestamp = new Date(timestamp * 1000);
+                    timestamp = timestamp.toUTCString();
 
-                    var row = tbody.childNodes[i]
 
-                    row.innerHTML = "<td style=\"width:10%;\">Device #" + id + "</td>\n" +
-                        "<td>\n" +
-                        "<div>작업량: " + percent + "% <span>&nbsp;(" + fraction + ")</span></div>\n" +
-                        "<div class=\"progress progress-striped progress-success active\">\n" +
-                        "<div class=\"bar\" style=\"width: " + percent + "%;\"></div>\n" +
-                        "</div>\n" +
-                        "</td>\n" +
-                        "<td style=\"width:10%;\">\n" +
-                        "<div>\n" +
-                        "<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\"href=\'/main/"+id+"\'>\n" +
-                        "<i class=\"icon-fullscreen\"></i>\n" +
-                        "<p>detail</p>\n" +
-                        "</a>\n" +
-                        "</div>\n" +
-                        "</td>"
+                    var compVal = 0;
+                    var msg = '';
+                    for (key in current_device) {
+                        if (!(typeof current_device[key] === 'string' || current_device[key] instanceof String))
+                            compVal |= current_device[key]
+                    }
+                    if (compVal) {
+                        console.log("start notification")
+                        msg = '[' + current_device['id'] + '] '
+
+                        if (current_device["lubricant_machine"])
+                            msg += '장비 윤활유 부족/'
+                        if (current_device["lubricant_saw"])
+                            msg += '톱날 윤활유 부족/'
+                        if (current_device["pressure_air_main"])
+                            msg += '메인 공기압 부족/'
+                        if (current_device["pressure_oil_hydraulic"])
+                            msg += '윤활유 압력 부족/'
+                        if (current_device["servo_cut"])
+                            msg += '절단 서보 에러/'
+                        if (current_device["servo_transfer"])
+                            msg += '이송 서보 에러/'
+                        if (current_device["spindle"])
+                            msg += '스핀들 이상 에러/'
+                        if (current_device["safety_door"])
+                            msg += '안전 도어 이상/'
+                        if (current_device["depletion"])
+                            msg += '소재 부족/'
+                        console.log(msg);
+                        Notify(msg, null, null, 'danger');
+                    }
+
                 }
 
-                }, 5000)
+
+
+            }
 
 
             function _ajax_request(url, data, callback, method, returnType, auth, error) {
@@ -160,54 +177,39 @@ html(lang='en')
                 _ajax_request('/data/renewed_data', "", function (data) {
                     sessionStorage.setItem('data', data.data)
 
-                    var newdata = sessionStorage.getItem("data")
-                    newdata = JSON.parse(newdata);
+                    var data = sessionStorage.getItem("data");
 
-                    for (var i = 0; i < newdata.length; ++i) {
-                        var current_device = newdata[i]
-                        var workload_current = current_device['current_workload'];
-                        var workload_total = current_device['total_workload'];
-                        var workload = workload_current + '/' + workload_total;
+                    data = JSON.parse(data);
+                    var tbody = document.getElementById('listtable');
+                    for (var i = 0; i < tbody.childElementCount; i++) {
+                        var id = data[i]['id']
+                        var workload = data[i]['workload']
+                        var total = data[i]['total_workload'];
+                        var current = data[i]['current_workload'];
 
-                        var timestamp = current_device['timestamp'];
-                        timestamp = new Date(timestamp * 1000);
-                        timestamp = timestamp.toUTCString();
+                        var fraction = current + "/" + total;
+                        var percent = current / total * 100;
+                        percent = percent.toFixed(2)
 
+                        var row = tbody.childNodes[i]
 
-                        var compVal = 0;
-                        var msg = '';
-                        for (key in current_device) {
-                            if (!(typeof current_device[key] === 'string' || current_device[key] instanceof String))
-                                compVal |= current_device[key]
-                        }
-                        if (compVal) {
-                            console.log("start notification")
-                            msg = '[' + current_device['id'] + '] '
-
-                            if (current_device["lubricant_machine"])
-                                msg += '장비 윤활유 부족/'
-                            if (current_device["lubricant_saw"])
-                                msg += '톱날 윤활유 부족/'
-                            if (current_device["pressure_air_main"])
-                                msg += '메인 공기압 부족/'
-                            if (current_device["pressure_oil_hydraulic"])
-                                msg += '윤활유 압력 부족/'
-                            if (current_device["servo_cut"])
-                                msg += '절단 서보 에러/'
-                            if (current_device["servo_transfer"])
-                                msg += '이송 서보 에러/'
-                            if (current_device["spindle"])
-                                msg += '스핀들 이상 에러/'
-                            if (current_device["safety_door"])
-                                msg += '안전 도어 이상/'
-                            if (current_device["depletion"])
-                                msg += '소재 부족/'
-                            console.log(msg);
-                            Notify(msg, null, null, 'danger');
-                        }
-
+                        row.innerHTML = "<td style=\"width:10%;\">Device #" + id + "</td>\n" +
+                            "<td>\n" +
+                            "<div>작업량: " + percent + "% <span>&nbsp;(" + fraction + ")</span></div>\n" +
+                            "<div class=\"progress progress-striped progress-success active\">\n" +
+                            "<div class=\"bar\" style=\"width: " + percent + "%;\"></div>\n" +
+                            "</div>\n" +
+                            "</td>\n" +
+                            "<td style=\"width:10%;\">\n" +
+                            "<div>\n" +
+                            "<a class=\"quick-button-small span1\" style=\"width: 100%; float:right;\"href=\'/main/" + id + "\'>\n" +
+                            "<i class=\"icon-fullscreen\"></i>\n" +
+                            "<p>detail</p>\n" +
+                            "</a>\n" +
+                            "</div>\n" +
+                            "</td>"
                     }
-
+                    notification()
 
                 }, "GET", "json", sessionStorage['token'],
                     function (jqXHR, exception) {
