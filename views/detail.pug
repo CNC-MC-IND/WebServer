@@ -10,6 +10,7 @@ html(lang='en')
         // end: Meta
         // start: Mobile Specific
         meta(name='viewport', content='width=device-width, initial-scale=1')
+        // initial-scale=1')
         // end: Mobile Specific
         // start: CSS
         link#bootstrap-style(href='../css/bootstrap.min.css', rel='stylesheet')
@@ -53,7 +54,7 @@ html(lang='en')
                                             li.active
                                                 a(href='#info') Info
                                             li
-                                                a(href='#camera') Camera
+                                                a(href='#Camera' onclick='console.log("Camera tab Click");') Camera
                                         #myTabContent.tab-content
                                             #info.tab-pane.active
                                                 table.table(align='center' style='width:80%;')
@@ -64,9 +65,9 @@ html(lang='en')
                                                             th
                                                             th
                                                     tbody#infolist
-                                            #camera.tab-pane
+                                            #Camera.tab-pane
                                                 div(align='center')
-                                                    video(src='', controls='controls' id='view' width='640px' height='480px')
+                                                    video(src='', controls='controls' id='view' width='70%' height='480px')
                                                 hr
                                                 table#testTable.table.table-striped.table-bordered.bootstrap-datatable(align='center' cellspacing="0" width="80%")
                                                     thead
@@ -174,7 +175,6 @@ html(lang='en')
             playtest = setInterval(GetRenewedData,5000)
 
             function notification() {
-                console.log("start interval function for notification")
                 var newdata = sessionStorage.getItem("data");
                 newdata = JSON.parse(newdata);
 
@@ -195,7 +195,6 @@ html(lang='en')
                             compVal |= current_device[key]
                     }
                     if (compVal) {
-                        console.log("start notification")
                         msg = '[' + current_device['id'] + '] '
 
                         if (current_device["lubricant_machine"])
@@ -240,7 +239,6 @@ html(lang='en')
 
             function GetRenewedData() {
                 _ajax_request('/data/renewed_data', "", function (data) {
-                    console.log("start renewedata function")
                     sessionStorage.setItem('data', data.data);
 
                     var data = sessionStorage.getItem("data");
@@ -302,7 +300,6 @@ html(lang='en')
                             }
                         }
                     }
-                    console.log("end renewedata function")
                     notification();
                 }, "GET", "json", sessionStorage['token'],
                     function (jqXHR, exception) {
