@@ -39,7 +39,7 @@ html(lang='en')
                         .icons
                             a(href='/')
                                 i.halflings-icon.home
-                            a(href='/admin/approve')
+                            a(href='#' onclick="AdminCheck();")
                                 i.halflings-icon.eye-open
                         h2 Login to your account
                         form.form-horizontal(action='javascript:PostRequestCert()')
@@ -58,6 +58,9 @@ html(lang='en')
                                 .button-login
                                     button.btn.btn-primary(type='submit') Login
                                 .clearfix
+
+                        h3
+                            a(href='/account/reset') Forgot Password?
                         hr
                         h3 Not registered yet?
                         p
@@ -80,17 +83,20 @@ html(lang='en')
         script(src='js/notify.js')
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
         script(type='text/javascript').
-            /*function doNotification(title, message) {
-                var myNotification = new Notify(title, {
-                    body: message,
-                    tag: 'My unique id',
+            function AdminCheck(){
+                var pw = prompt("비밀번호를 입력하세요","");
 
-                    timeout: 3
-                });
+                _ajax_request('/admin/approve',{pw:pw},function(data){
+                    if (data.type)
+                        location.replace("admin/approve");
+                    else
+                        location.reload();
 
-                myNotification.show();
+                },"POST","json")
+
+
+
             }
-            */
 
             function _ajax_request(url, data, callback, method, returnType, auth) {
                 return jQuery.ajax({

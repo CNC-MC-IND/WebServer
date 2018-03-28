@@ -32,6 +32,19 @@ router.get('/', function(req, res, next) {
     })
 });
 
+router.post('/',function (req, res, next) {
+    if (configDB.password ===req.body.pw) {
+        res.json({
+            type: true
+        });
+    }else{
+        res.json({
+            type: false
+        })
+    }
+})
+
+
 /* PUT approve. */
 router.put('/',function(req, res, next) {
     pool.getConnection(function (err, connexion) {

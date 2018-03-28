@@ -122,10 +122,12 @@ html(lang='en')
 
                     var compVal = 0;
                     var msg = '';
-                    for (key in current_device) {
-                        if (!(typeof current_device[key] === 'string' || current_device[key] instanceof String))
-                            compVal |= current_device[key]
-                    }
+
+                    compVal = current_device["lubricant_machine"] | current_device["lubricant_saw"] |
+                        current_device["pressure_air_main"] | current_device["pressure_oil_hydraulic"]
+                        | current_device["servo_cut"] | current_device["servo_transfer"]
+                        | current_device["spindle"] | current_device["safety_door"] | current_device["depletion"]
+
                     if (compVal) {
                         msg = '[' + current_device['id'] + '] '
 
@@ -147,7 +149,7 @@ html(lang='en')
                             msg += '안전 도어 이상/'
                         if (current_device["depletion"])
                             msg += '소재 부족/'
-                        console.log(msg);
+
                         Notify(msg, null, null, 'danger');
                     }
 

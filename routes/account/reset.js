@@ -9,6 +9,11 @@ var pool = mysql.createPool(configDB);
 var toolBox = require('../../models/toolBox');
 var bcrypt = require('bcryptjs');
 
+
+router.get('/', function(req, res){
+    res.render('reset')
+});
+
 /* POST users listing. */
 router.post('/', function(req, res, next) {
     pool.getConnection(function (err, connexion) {

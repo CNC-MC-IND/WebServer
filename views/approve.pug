@@ -71,6 +71,7 @@ html(lang='en')
                     error: error
                 });
             }
+
             function PutRequest(data) {
                 _ajax_request("/admin/approve",{email: data}, function(data){
                     if(data.type){

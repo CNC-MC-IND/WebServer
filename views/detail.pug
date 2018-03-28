@@ -110,7 +110,9 @@ html(lang='en')
                         var servo_transfer = current_device['servo_transfer'] ? true : false; //이송 서보 에러
                         var spindle = current_device['spindle'] ? true : false; //스핀들 이상 에러
                         var safety_door = current_device['safety_door'] ? true : false; //안전문 이상
-                        var depletion = current_device['depletion'] ? true : false; //소제 부족
+                        var depletion = current_device['depletion'] ? true : false; //소재 부족
+                        var emission_barrel = current_device['emission_barrel'].toString(); //배출통 관리
+                        var yield_saw = current_device['yield_saw'].toString(); // 톱당 생산수량
                         var workload_current = current_device['current_workload'];
                         var workload_total = current_device['total_workload'];
                         var workload = workload_current + "/" + workload_total;
@@ -118,6 +120,7 @@ html(lang='en')
                         var timestamp = current_device['timestamp'];
                         timestamp = new Date(timestamp * 1000);
                         timestamp = timestamp.toUTCString();
+
 
                         var json = {
                             "장비 윤활유 상태": lubricant_machine,
@@ -129,6 +132,8 @@ html(lang='en')
                             "스핀들 모터 상태": spindle,
                             "안전 도어 이상": safety_door,
                             "소재 여유량 상태": depletion,
+                            "배출통 관리": emission_barrel,
+                            "톱당 생산수량": yield_saw,
                             "작업량": workload,
                             "마지막 갱신시간": timestamp
                         };
@@ -190,10 +195,14 @@ html(lang='en')
 
                     var compVal = 0;
                     var msg = '';
-                    for (key in current_device) {
-                        if (!(typeof current_device[key] === 'string' || current_device[key] instanceof String))
-                            compVal |= current_device[key]
-                    }
+
+
+                    compVal = current_device["lubricant_machine"] | current_device["lubricant_saw"] |
+                        current_device["pressure_air_main"] | current_device["pressure_oil_hydraulic"]
+                        | current_device["servo_cut"] | current_device["servo_transfer"]
+                        | current_device["spindle"] | current_device["safety_door"] | current_device["depletion"]
+
+
                     if (compVal) {
                         msg = '[' + current_device['id'] + '] '
 
@@ -215,7 +224,7 @@ html(lang='en')
                             msg += '안전 도어 이상/'
                         if (current_device["depletion"])
                             msg += '소재 부족/'
-                        console.log(msg);
+
                         Notify(msg, null, null, 'danger');
                     }
 
@@ -242,6 +251,7 @@ html(lang='en')
                     sessionStorage.setItem('data', data.data);
 
                     var data = sessionStorage.getItem("data");
+                    //console.log(data);
                     var deviceid = !{deviceid};
                     data = JSON.parse(data);
 
@@ -257,10 +267,11 @@ html(lang='en')
                             var spindle = current_device['spindle'] ? true : false; //스핀들 이상 에러
                             var safety_door = current_device['safety_door'] ? true : false; //안전문 이상
                             var depletion = current_device['depletion'] ? true : false; //소제 부족
+                            var emission_barrel = current_device['emission_barrel'].toString(); // 배출통 관리
+                            var yield_saw = current_device['yield_saw'].toString(); // 톱탕생산수량
                             var workload_current = current_device['current_workload'];
                             var workload_total = current_device['total_workload'];
                             var workload = workload_current + '/' + workload_total;
-
                             var timestamp = current_device['timestamp'];
                             timestamp = new Date(timestamp * 1000);
                             timestamp = timestamp.toUTCString();
@@ -275,6 +286,8 @@ html(lang='en')
                                 "스핀들 모터 상태": spindle,
                                 "안전 도어 이상": safety_door,
                                 "소재 여유량 상태": depletion,
+                                "배출통 관리": emission_barrel,
+                                "톱당 생산수량": yield_saw,
                                 "작업량": workload,
                                 "마지막 갱신시간": timestamp
                             };
