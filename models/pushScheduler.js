@@ -3,7 +3,7 @@ var mysql = require('mysql');
 const configDB = require('../configDB');
 
 var pool = mysql.createPool(configDB);
-var compVal = 0;
+
 var loopFlag = true;
 var async = require('async');
 var delay = 10000;
@@ -26,10 +26,12 @@ exports.start = function () {
                         throw err;
 
                     var item;
-                    var msg = '';
                     for (var i = 0; i < rows.length; i++) {
+                        var compVal = 0;
+                        var msg = '';
                         item = rows[i];
-                        compVal |= item.lubricant_machine |
+
+                        compVal = item.lubricant_machine |
                             item.lubricant_saw |
                             item.pressure_air_main |
                             item.pressure_oil_hydraulic |
@@ -37,7 +39,7 @@ exports.start = function () {
                             item.servo_transfer |
                             item.spindle |
                             item.safety_door |
-                            item.depletion
+                            item.depletion;
 
                         if (compVal) {
                             msg = '['+item.id.toString()+'] ';
@@ -45,7 +47,7 @@ exports.start = function () {
                             if (item.lubricant_machine) {
                                 msg += '장비 윤활유 부족/'
                             }
-                            if (item.lubricant_sawr) {
+                            if (item.lubricant_saw) {
                                 msg += '톱날 윤활유 부족/'
                             }
                             if (item.pressure_air_main) {
@@ -70,14 +72,14 @@ exports.start = function () {
                                 msg += '소재 부족/'
                             }
                         }
-                        if (compVal == 1){
+                        if (compVal){
                             toolBox.broadcastPush(msg)
                         }
 
                     }
                     connexion.release();
                 });
-            })
+            });
 
 
             setTimeout(function () {
