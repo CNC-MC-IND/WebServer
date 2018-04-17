@@ -3,5 +3,6 @@
  */
 module.exports = {
     'secret': 'NcSLaB2ol5',
-    'organization' : 'sexion'
+    'organization' : 'sexion',
+    'port' : '443'
 }

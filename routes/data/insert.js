@@ -14,7 +14,7 @@ router.post('/',function(req, res, next) {
             throw err;
 
         var jsonData = req.body.data;//JSON.parse(stringData)
-
+        console.log(req.body.data);
         var query = "INSERT into data (id, lubricant_machine, lubricant_saw, pressure_air_main, pressure_oil_hydraulic, servo_cut, servo_transfer, spindle, safety_door, depletion, emission_barrel, yield_saw, total_workload, current_workload, timestamp) VALUES"
 
         var data = jsonData

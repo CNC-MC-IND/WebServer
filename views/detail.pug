@@ -146,7 +146,7 @@ html(lang='en')
                             if (typeof json[key] === 'string' || json[key] instanceof String)
                                 flag = "<span class=\"\">" + json[key] + "</span>\n"
                             else
-                                flag = json[key] ? "<span class=\"label\">" + "장비 이상" + "</span>\n" : "<span class=\"label label-success\">" + "정상 동작" + "</span>\n";
+                                flag = json[key] ? "<span class=\"label\">" + "장비 이상" + "</span>\n" : "<span class=\"label label-success\">" + "정상 작동" + "</span>\n";
 
                             row.innerHTML =
                                 "<td class=\"center\">" + key + "</td>\n" +
@@ -154,12 +154,52 @@ html(lang='en')
                                 flag +
                                 "</td>\n";
                         }
+                        var tbody = document.getElementById('infolist');
+                        var row = tbody.insertRow(tbody.rows.length);
+
+                        row.innerHTML = "<td class=\"center\" colspan=\"2\"></td>" + "<button type=\"button\" onclick=\"PutOnOff()\">"+ " BUTTON OFF"+ "</button>" + "</td>\n";
+
+
                         break;
                     }
                 }
 
                 GetCameraList();
             }
+
+            function PutOnOff(){
+                var id = !{deviceid};
+                _ajax_request("/data/onoff", {id: id, onoff: 0}, function (data) {
+                    if (data.type)
+                        alert("Device OFF 요청 전송 완료");
+
+
+                }, 'PUT', "json", sessionStorage['token'], function (jqXHR, exception) {
+                    var msg = '';
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                    }
+                    alert(msg);
+                });
+
+
+
+            }
+
+
+
             $(document).ready(function () {
                     var table = $('#testTable').DataTable();
 
@@ -311,6 +351,12 @@ html(lang='en')
 
                                 a++;
                             }
+                            var tbody = document.getElementById('infolist');
+                            var row = tbody.childNodes[a];
+
+                            row.innerHTML = "<td class=\"center\" colspan=\"2\"></td>" + "<button type=\"button\" onclick=\"PutOnOff()\">" + " BUTTON OFF" + "</button>" + "</td>\n";
+
+
                         }
                     }
                     notification();
