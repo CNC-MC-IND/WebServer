@@ -120,6 +120,7 @@ html(lang='en')
                         var timestamp = current_device['timestamp'];
                         timestamp = new Date(timestamp * 1000);
                         timestamp = timestamp.toUTCString();
+                        timestamp = new Date(timestamp);
 
 
                         var json = {
@@ -135,7 +136,7 @@ html(lang='en')
                             "배출통 관리": emission_barrel,
                             "톱당 생산수량": yield_saw,
                             "작업량": workload,
-                            "마지막 갱신시간": timestamp
+                            "마지막 갱신시간": timestamp.toLocaleString()
                         };
 
                         for (key in json) {
@@ -315,6 +316,7 @@ html(lang='en')
                             var timestamp = current_device['timestamp'];
                             timestamp = new Date(timestamp * 1000);
                             timestamp = timestamp.toUTCString();
+                            timestamp = new Date(timestamp);
 
                             var json = {
                                 "장비 윤활유 상태": lubricant_machine,
@@ -329,7 +331,7 @@ html(lang='en')
                                 "배출통 관리": emission_barrel,
                                 "톱당 생산수량": yield_saw,
                                 "작업량": workload,
-                                "마지막 갱신시간": timestamp
+                                "마지막 갱신시간": timestamp.toLocaleString()
                             };
 
                             var a = 0;
